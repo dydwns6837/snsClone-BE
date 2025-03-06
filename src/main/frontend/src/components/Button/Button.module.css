@@ -1,0 +1,24 @@
+.buttons {
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 10px 0px ;
+  /* font-size: 1em; */
+  font-weight: 500;
+  /* background-color: #5eb4f1; */
+  cursor: pointer;
+  transition: .7s;
+  /* transition: border-color 0.25s; */
+}
+button:hover {
+  background-color: #434343;
+  color: white;
+}
+
+button:disabled,
+button:disabled:hover {
+  /* background-color: transparent; */
+  cursor: default;
+  background-color: rgba(239, 239, 239, 0.3);
+  color: rgb(178, 178, 178);
+}
+

@@ -1,0 +1,8 @@
+a {
+  text-decoration: none;
+  color: black;
+}
+
+.current {
+  color: rgb(137, 137, 137);
+}

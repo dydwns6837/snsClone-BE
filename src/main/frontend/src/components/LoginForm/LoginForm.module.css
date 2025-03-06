@@ -1,0 +1,49 @@
+.container {
+  /* background-color: blue; */
+  width: 350px;
+  margin: auto;
+  padding: 20px 0px;
+  border: 1px solid rgb(217, 217, 217);
+}
+
+.title {
+  text-align: center;
+  font-size: 45px;
+  padding: 35px 0px;
+  margin: 0;
+}
+
+.form {
+  /* background-color: red; */
+  width: 250px;
+  margin: auto;
+}
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  position: relative;
+}
+
+.notice {
+  position: absolute;
+  bottom: 0px;
+
+  color: rgb(255, 74, 74);
+  font-size: 11px;
+
+  width: 250px;
+  text-align: center;
+  left: 0px;
+  right: 0px;
+  margin: auto;
+}
+.inputField {
+  /* background-color: blue; */
+
+}
+
+.buttonField {
+  /* margin-top: 20px; */
+  padding: 25px 0px 30px 0px;
+}
