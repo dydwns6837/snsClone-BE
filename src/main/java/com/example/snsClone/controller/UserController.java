@@ -7,7 +7,7 @@ import com.example.snsClone.entity.UserEntity;
 import com.example.snsClone.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
+//테스트
 @RestController
 @RequestMapping("/api/users")
 @CrossOrigin(origins = "http://localhost:5173")

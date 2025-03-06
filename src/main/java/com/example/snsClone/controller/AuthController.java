@@ -6,7 +6,7 @@ import com.example.snsClone.dto.SignupRequestDTO;
 import com.example.snsClone.service.AuthService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
+// 깃에 추가
 @RestController
 @RequestMapping("/api")
 @CrossOrigin(origins = "http://localhost:5173")
