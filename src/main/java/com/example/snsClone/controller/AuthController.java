@@ -1,6 +1,7 @@
 package com.example.snsClone.controller;
 
 import com.example.snsClone.dto.LoginRequestDTO;
+import com.example.snsClone.dto.LoginResponseDTO;
 import com.example.snsClone.dto.ResponseDTO;
 import com.example.snsClone.dto.SignupRequestDTO;
 import com.example.snsClone.service.AuthService;
@@ -25,8 +26,8 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<ResponseDTO> login(@RequestBody LoginRequestDTO request) {
-        ResponseDTO response = authService.login(request);
+    public ResponseEntity<LoginResponseDTO> login(@RequestBody LoginRequestDTO request) {
+        LoginResponseDTO response = authService.login(request);
         return ResponseEntity.status(response.getStatus()).body(response);
     }
 }

@@ -1,0 +1,14 @@
+.skeleton {
+  background-color: rgb(233, 233, 233);
+}
+
+.article {
+  width: 500px;
+  height: 30px;
+}
+
+.image {
+  width: 180px;
+  height: 180px;
+  border-radius: 100px;
+}

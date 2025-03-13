@@ -1,14 +1,13 @@
-import Header from '../components/Header/Header'
+import Header from '../components/Sidebar/Sidebar'
 import UserInfo from '../components/Profile/UserInfo'
-import Posts from '../components/Profile/Posts'
+import Posts from '../components/Profile/UserPosts'
 import { useState } from 'react'
 
 function HomePage() {
 
   return(
     <>
-      <Header/>
-      <h1>안녕하세요 사용자님</h1>
+      <span>여기는 홈페이지에요</span>
     </>
   )
 }

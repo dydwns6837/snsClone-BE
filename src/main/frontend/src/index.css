@@ -1,3 +1,14 @@
+html {
+  overflow-y: scroll;
+}
+#root {
+  /* background-color: yellow; */
+  margin-left: 261px; /*sidebar때문에 content표시할부분을 오른쪽으로 밈*/
+  /* padding: 20px 10px; */
+  
+}
+
+
 /* :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;

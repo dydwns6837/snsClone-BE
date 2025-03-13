@@ -20,21 +20,22 @@
 */
 import { useState, useEffect } from "react"
 
-import Header from '../components/Header/Header'
+import Header from '../components/Sidebar/Sidebar'
 import LoginForm from "../components/LoginForm/LoginForm"
 import HomePage from "./HomePage"
 
-const tokenAtClient = () => {
-  return localStorage.getItem("access_token")
-  // 이게 서버에 요청보내고 응답 받는거라면?
-}
+// const tokenAtClient = () => {
+//   return localStorage.getItem("access_token")
+//   // 이게 서버에 요청보내고 응답 받는거라면?
+// }
 function Home() {
-  const [isAuth, setIsAuth] = useState(tokenAtClient())
+  // const [isAuth, setIsAuth] = useState(tokenAtClient())
   
   return (
     <>
       <h1>홈라우트</h1>
-      {isAuth ? <HomePage/> : <LoginForm setIsAuth = {setIsAuth}/>}
+      {/* {isAuth ? <HomePage/> : <LoginForm setIsAuth = {setIsAuth}/>} */}
+      {/* {isAuth ? <HomePage/> : <LoginForm setIsAuth = {setIsAuth}/>} */}
     </>
   )
 }

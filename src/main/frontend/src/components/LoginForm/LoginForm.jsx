@@ -6,38 +6,39 @@ import Button from "../Button/Button"
 
 import styles from "./LoginForm.module.css"
 
-function LoginForm({ setIsAuth }) {
-  const [userValue, setuserValue] = useState("")
+const tokenAtClient = () => {
+  return localStorage.getItem("access_token")
+  // 이게 서버에 요청보내고 응답 받는거라면?
+}
+
+const LoginForm = ({ setIsAuth }) => {
+  const [contact, setContact] = useState("")
   const [password, setPassword] = useState("")
   const [isValid, setisValid] = useState(false)
   const [alert, setAlert] = useState("")
 
   const navigate = useNavigate()
 
-  const tokenAtClient = () => {
-    return localStorage.getItem("access_token") // 루트 라우팅일때 토큰 여부 바꿔서 홈페이지 보이게 하려는 건데...
+  const isValidateForm = (contact, password) => {
+    return contact.length && password.length >= 6
   }
 
-  // console.log(userName, password);
-  const isValidateForm = (userValue, password) => {
-    return userValue.length && password.length >= 6
-  }
-
-  const userValueInputHandler = (evt) => {
-    const newUserValue = evt.target.value
-    setuserValue(newUserValue)
-    setisValid(isValidateForm(newUserValue, password))
+  const contactInputHandler = (evt) => {
+    const newContact = evt.target.value
+    setContact(newContact)
+    setisValid(isValidateForm(newContact, password))
   }
 
   const passwordInputHandler = (evt) => {
     const newPassword = evt.target.value
     setPassword(newPassword)
-    setisValid(isValidateForm(userValue, newPassword))
+    setisValid(isValidateForm(contact, newPassword))
   }
 
   const submitHandler = async (evt) => {
     evt.preventDefault()
     if(!isValid) { // 부적절한 형식일경우 리턴
+      console.log('입력의 형식이 잘못됌');
       return
     }
 
@@ -48,60 +49,29 @@ function LoginForm({ setIsAuth }) {
     console.log(json);
 
     try {
-      const response = await fetch("http://localhost:4000/api/login", {
+      const response = await fetch("http://localhost:8080/api/login", {
         method : "POST",
         headers : {
           'Content-Type' : 'application/json'
         },
         body : json
       })
-      console.log(response);
-      if(!response.ok) { //정상이라면
+      console.log('통신완료요');
+      if(!response.ok) { //비정상이라면
         const { message } = await response.json()
         setAlert(message)
+        setIsAuth()
         return
       }
 
       const { message, accessToken } = await response.json()
       localStorage.setItem('access_token', accessToken)
-      setAlert(message)
+      setAlert(message) // 얘땜에 리랜더링이 발생하는건가??
       setIsAuth(tokenAtClient())
-      // console.log(message);      
+
     } catch (error) {
       setAlert("알수없는 오류에요")
     }
-    /*
-    fetch("http://localhost:4000/api/login", {
-      // mode : 'no-cors',
-      method : "POST",
-      headers : {
-        'Content-Type' : 'application/json'
-      },
-      body : json, // 1. 서버에 사용자 정보를 전송, 로그인요청
-      // credentials : 'include' //애초에 이 Fetch에는 이 옵션이 필요없는것같은데???
-    })
-    .then(response => {
-      console.log('response 가 왔어요');
-      if(!response.ok) { 
-        return response.text().then(err => { //얘가 비동기적으로 동작하기때문에 아래 return response.json()이 먼저 동작
-          throw new Error(err)
-        })
-      }
-      return response.json()
-    })
-    .then(data => {
-      localStorage.setItem("access_token", data.accessToken)
-      console.log(data);
-      setIsAuth(tokenAtClient()) // 루트라우팅에서 홈페이지를 랜더링하게
-      // navigate('/')
-    })
-    .catch(err => {
-      console.log('catch블럭임');
-      console.log(err);
-    })
-    */
-    // .catch(err => console.log(err)) // 여기 catch가 실행됐다고 해서 fetch에서 오류인지 위 2개의 then에서 오류인지 알수없다!! 조심
-
   }
 
   const signupHandler = () => {
@@ -112,7 +82,7 @@ function LoginForm({ setIsAuth }) {
       <h2 className={styles.title}>Instagram</h2>
       <form className={styles.form} onSubmit={submitHandler}>
         <div className={`${styles.field} ${styles.inputField}`}>
-          <Input name = "userValue"  placeholder={"전화번호, 사용자 이름 또는 이메일"} handler={userValueInputHandler} value = {userValue}/>
+          <Input name = "contact"  placeholder={"전화번호, 사용자 이름 또는 이메일"} handler={contactInputHandler} value = {contact}/>
           <Input name = "password"  type="password" placeholder={"비밀번호"} handler={passwordInputHandler} value = {password}/>
         </div>
         <div className={`${styles.field} ${styles.buttonField}`}>

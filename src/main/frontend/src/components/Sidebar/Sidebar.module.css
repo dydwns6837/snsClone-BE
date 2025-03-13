@@ -1,0 +1,56 @@
+nav {
+  background-color: rgb(255, 255, 255);
+  height: 100vh;
+  width: 230px;
+  padding: 0px 15px;
+  border-right: 1px solid rgb(225, 224, 224);
+  font-size: 10px;
+  font-weight: 120px;
+  position: fixed;
+  left: 0;
+  top: 0;
+}
+
+a {
+  text-decoration: none;
+  color: black;
+
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.navs li {
+  margin-bottom: 8px;
+  padding: 8px;
+  cursor: pointer;
+  transition: .7s;
+}
+
+.navs li:hover {  
+  background-color: rgb(241, 241, 241);
+}
+
+.navs a {
+  display: flex;
+  gap: 10px;
+  align-items:center;
+  transition: .5s;
+  font-size: 16px;
+}
+
+.logo {
+  padding: 30px 5px;
+}
+
+.logo a {
+  font-size: 25px;
+  font-family: "Lobster", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  display: inline-block;
+  padding: 0px 110px 5px 0px;
+}

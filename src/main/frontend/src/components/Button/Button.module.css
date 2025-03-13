@@ -1,22 +1,33 @@
-.buttons {
-  border-radius: 8px;
+.button {
   border: 1px solid transparent;
-  padding: 10px 0px ;
-  /* font-size: 1em; */
-  font-weight: 500;
-  /* background-color: #5eb4f1; */
+  border-radius: 8px;
+  padding: 10px 20px ;
+  font-weight: 700;
   cursor: pointer;
   transition: .7s;
-  /* transition: border-color 0.25s; */
+  min-height: 40px; /*다른 로그인폼이나 페이징에서 문제일으킬지도... 얘보다 작은 높이여야 문제생기는거임*/
 }
-button:hover {
+
+/* 기본 버튼:hover 스타일 */
+.default:hover {
   background-color: #434343;
   color: white;
 }
 
+/* blue 버튼 스타일 */
+.blue {
+  color: white;
+  background-color: rgb(79, 167, 255);
+}
+
+/* blue 버튼:hover 스타일 */
+.blue:hover {
+  background-color: rgb(24, 103, 182);
+}
+
+/* 비활성 버튼 스타일 */
 button:disabled,
 button:disabled:hover {
-  /* background-color: transparent; */
   cursor: default;
   background-color: rgba(239, 239, 239, 0.3);
   color: rgb(178, 178, 178);

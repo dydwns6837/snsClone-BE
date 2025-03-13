@@ -1,63 +1,67 @@
 import { useState, useEffect } from "react";
+import Skeleton from "../Skeleton/Skeleton";
+import LoadingPage from "../../pages/LoadingPage";
+import FollowButton from "../Button/FollowButton";
+// import Button from "../Button/Button";
+
+const follow = () => {
+  // 실제로는 서버에 팔로우 요청을하는 코드
+  return new Promise((res, rej) => {
+    setTimeout(() => {
+      res()
+    }, 2000)
+  })
+}
+
+const Button = () => {
+  /*
+   * isFollow = false(state)
+   * 클릭시, 서버에 팔로우 요청
+   * 성공시 toggleFollow 호출
+   * 리랜더링
+   */
+  const [isFollow, setFollow] = useState(true)
+  const [isLoading, setIsLoading] = useState(false)
+
+  const toggleFollow = async () => {
+    setIsLoading(prev => !prev)
+    // setIsLoading(!isLoading)
+    const response = await follow()
+    // setFollow(!isFollow)
+    setFollow(prev => !prev)
+    // setIsLoading(!isLoading)
+    setIsLoading(prev => !prev)
+  }
+  return (
+    // 버튼은 한개고, isFollow값에 따라 스타일이 다르게 랜더링
+    // 버튼 클릭시 로딩중, isFollow값 토글, 로딩완료 근데 setIsLoading만 따로 적용된느낌인데??
+    // rerender >> 바뀐스타일
+    <button onClick = {toggleFollow} 
+      style={ isFollow ? {
+        color : "black",
+        backgroundColor : "white",
+        border : "1px solid black",
+        borderRadius : "5px",
+        cursor : "pointer"
+      } : {
+        color : "white",
+        backgroundColor : "blue",
+        border : "1px solid black",
+        borderRadius : "5px",
+        cursor : "pointer"
+      }
+    }>{ isLoading ? "..." : isFollow ? "팔로잉" : "팔로우" }</button>
+  )
+}
+
 
 function Test() {
-  // gpt뭐함 ㅋㅋ
-  /*
-  const codePromiseGen = () => {
-    return new Promise((res, jej) => {
-      res('code')
-    })
-  }
-  const jsonPromiseGen = () => {
-    return new Promise((res, jej) => {
-      res('token')
-    })
-  }
-  new Promise((res, rej) => {
-    console.log('fetch완료');
-    res()
-  })
-  .then(() => {
-    if(true) {
-      return codePromiseGen().then(code => {
-        console.log('에러코드값')
-        throw new Error(code)
-      })
-    }
-    console.log('정상응답 토큰');
-    return jsonPromiseGen() 
-  })
-  .then(data => {
-    console.log(data);
-  })
-  .catch(err => {
-    console.log(err);
-  })
-  */
-  const fetchData = async () => {
-    // console.log('hdy');
-    const response = await fetch("http://localhost:4000/login-cookie", {
-      method : "POST",
-      headers : {
-        'Content-Type' : 'application/json'
-      },
-      // body : { "user_name" : "peter", "user_id" : "uno1547", "password" : "cocacola10*"} // 1. 서버에 사용자 정보를 전송, 로그인요청
-      body : JSON.stringify({ id : "peter", user_id : "uno1547", password : "cocacola10*"}) // 1. 서버에 사용자 정보를 전송, 로그인요청
-    })
-    if(!response.ok) {
-      const status = response.status
-      const code = await response.text()
-      console.log(code);
-      throw new Error(`code is ${status} message is ${code}`)
-      return
-    }
-    console.log('환영해요');
-    const token = await response.json().accessToken
-  }
-  fetchData()
+  
   return (
     <>
-      <h1>실험실</h1>
+      <Button/>
+      <FollowButton isFollwee={true}/>
+      <FollowButton isFollwee={false}/>
     </>
   )
 }
