@@ -12,11 +12,11 @@ const Sidebar = () => {
 
   const getUserId = async () => {
     try {
-      const response = await fetch("http://localhost:8080/api/user", {
+      const response = await fetch("http://localhost:8080/api/users/userID", {
         headers : { Authorization : `Bearer ${localStorage.getItem("access_token")}`}
       })
       const data = await response.json()
-      const userID = data.userID
+      const userID = data.message;
       setUserID(userID)
     } catch(err) {
       console.log(err);

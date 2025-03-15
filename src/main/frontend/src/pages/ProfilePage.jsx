@@ -28,7 +28,7 @@ const ProfilePage = () => {
           res()
         }, 1000)
       })
-      const response = await fetch(`http://localhost:8080/api/user/profile/${userId}`, {
+      const response = await fetch(`http://localhost:8080/api/users/profile/${userId}`, {
         headers : {
           Authorization : `Bearer ${localStorage.getItem("access_token")}`
         }

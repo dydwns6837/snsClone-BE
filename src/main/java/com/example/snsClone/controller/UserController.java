@@ -2,6 +2,7 @@ package com.example.snsClone.controller;
 
 
 
+import com.example.snsClone.dto.ResponseDTO;
 import com.example.snsClone.dto.SignupRequestDTO;
 import com.example.snsClone.entity.UserEntity;
 import com.example.snsClone.service.UserService;
@@ -36,5 +37,15 @@ public class UserController {
     public ResponseEntity<String> deleteUser() {
         userService.deleteUser();
         return ResponseEntity.ok("회원 탈퇴 완료");
+    }
+
+    @GetMapping("/userID")
+    public ResponseEntity<ResponseDTO> getMyNickname(@RequestHeader("Authorization") String token) {
+
+        // 핵심 로직은 서비스에 위임
+        ResponseDTO response = userService.getNicknameByToken(token);
+
+        // 상태 코드와 응답 반환
+        return ResponseEntity.status(response.getStatus()).body(response);
     }
 }
