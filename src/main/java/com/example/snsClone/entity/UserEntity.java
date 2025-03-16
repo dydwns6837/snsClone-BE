@@ -33,10 +33,4 @@ public class UserEntity {
 
     @Column(nullable = false, unique = true)
     private String phoneNumber;
-
-    @CreationTimestamp
-    private LocalDateTime createdAt;
-
-    @UpdateTimestamp
-    private LocalDateTime updatedAt;
 }
