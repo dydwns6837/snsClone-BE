@@ -48,4 +48,12 @@ public class UserController {
         // 상태 코드와 응답 반환
         return ResponseEntity.status(response.getStatus()).body(response);
     }
+
+    @GetMapping("/profile/{userId}")
+    public ResponseEntity<ResponseDTO> getUserProfile(
+            @PathVariable("userId") String nickName,
+            @RequestHeader("Authorization") String authorizationHeader
+    ) {
+        return userService.getUserProfile(nickName, authorizationHeader);
+    }
 }

@@ -11,4 +11,12 @@ public class ResponseDTO {
     private int status;     // 상태 코드
     private boolean success; // 성공 여부
     private String message;  // 응답 메시지
+    private Object data;
+
+    public ResponseDTO(int status, boolean success, String message) {
+        this.status = status;
+        this.success = success;
+        this.message = message;
+        this.data = null;
+    }
 }
