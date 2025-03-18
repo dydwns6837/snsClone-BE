@@ -1,0 +1,12 @@
+.skeletons {
+  display: flex;
+  padding: 10px 0px;
+  gap: 15px;
+}
+
+.subs {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 10px;
+}

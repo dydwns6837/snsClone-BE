@@ -1,10 +1,12 @@
 package com.example.snsClone.entity;
 
 import jakarta.persistence.*;
-
-import java.time.LocalDateTime;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
+@Getter
+@NoArgsConstructor
 @Table(name = "follow")
 public class FollowEntity {
 
@@ -13,13 +15,17 @@ public class FollowEntity {
     private Long id;
 
     // 팔로우 하는 사람
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "follower_id", nullable = false)
     private UserEntity follower;
 
     // 팔로우 당하는 사람
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "following_id", nullable = false)
     private UserEntity following;
 
+    public FollowEntity(UserEntity follower, UserEntity following) {
+        this.follower = follower;
+        this.following = following;
+    }
 }

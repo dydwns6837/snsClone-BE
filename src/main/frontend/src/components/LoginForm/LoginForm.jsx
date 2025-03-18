@@ -38,7 +38,7 @@ const LoginForm = ({ setIsAuth }) => {
   const submitHandler = async (evt) => {
     evt.preventDefault()
     if(!isValid) { // 부적절한 형식일경우 리턴
-      console.log('입력의 형식이 잘못됌');
+      // console.log('입력의 형식이 잘못됌');
       return
     }
 
@@ -46,7 +46,7 @@ const LoginForm = ({ setIsAuth }) => {
     const formData = new FormData(form)
     const entry = Object.fromEntries(formData)
     const json = JSON.stringify(entry)
-    console.log(json);
+    // console.log(json);
 
     try {
       const response = await fetch("http://localhost:8080/api/login", {
@@ -56,14 +56,15 @@ const LoginForm = ({ setIsAuth }) => {
         },
         body : json
       })
-      console.log('통신완료요');
+      // console.log('통신완료요');
       if(!response.ok) { //비정상이라면
         const { message } = await response.json()
         setAlert(message)
-        setIsAuth()
+        // setIsAuth() // 얘뭐지
         return
       }
 
+      // 정상일경우
       const { message, accessToken } = await response.json()
       localStorage.setItem('access_token', accessToken)
       setAlert(message) // 얘땜에 리랜더링이 발생하는건가??

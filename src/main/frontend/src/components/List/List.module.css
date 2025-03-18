@@ -1,0 +1,92 @@
+.modal {
+  width: 400px;
+  height: 500px;
+  /* overflow-y: scroll; */
+  background-color: rgb(255, 255, 255);
+  /* border: 1px solid rgb(129, 129, 129); */
+  border-radius: 15px;
+
+  display: flex;
+  flex-direction: column;
+
+  overflow: hidden; /*얘가 중요!!*/
+}
+
+.head {
+  display: flex;
+  font-weight: bold;
+  align-items: center;
+  justify-content: space-between;
+
+  border-bottom: 1px solid #e1e1e1;
+}
+
+.text {
+  /* display: inline-block; */
+  /* padding: 10px; */
+  text-align: center;
+  flex-grow: 1;
+}
+
+.closeButton {
+  background: none;
+  border: none;
+  font-weight: bold;
+  font-size: 20px;
+  padding: 13px 15px;
+  cursor: pointer;
+}
+
+.searchBar {
+  /* padding: 10px; */
+  display: block;
+  width: 85%;
+  margin: 7px auto;
+  padding: 10px 13px;
+  border: none;
+  outline: none;
+  background-color: rgb(239, 239, 239);
+  border-radius: 5px;
+}
+
+.list {
+  /* max-height: 300px; */
+
+  /* overflow-y: auto; */
+  /* border-radius: 15px; */
+  flex-grow: 1;
+  padding: 0px 15px;
+  /* margin: 10px; */
+  overflow-y: auto;
+  text-align: center;
+}
+
+.skeletons {
+  display: flex;
+}
+
+.alert {
+  font-weight: bold;
+  font-size: 20px;
+  text-align: center;
+}
+
+::-webkit-scrollbar {
+  /* width: 8px; 스크롤바 너비 */
+}
+
+/* 스크롤바의 움직이는 부분 (thumb) */
+::-webkit-scrollbar-thumb {
+  background-color: #bdbdbd; /* 스크롤바 색상 */
+  border-radius: 10px; /* 스크롤바의 둥근 정도 */
+  border: 2px solid white;
+}
+
+/* 스크롤바의 트랙 (바탕) */
+::-webkit-scrollbar-track {
+  background: transparent; /* 스크롤바 트랙 색상 */
+  /* border-radius: 30px; */
+}
+::-webkit-scrollbar-corner {
+	background: transparent;
+}

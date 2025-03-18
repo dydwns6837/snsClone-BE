@@ -2,9 +2,26 @@ import style from './UserInfo.module.css'
 import Button from "../Button/Button";
 import FollowButton from "../Button/FollowButton"
 
-const UserInfo = ({ userID, datas }) => {
-  const {isYou, isFollowee, postNums, followers, followees, article} = datas
+import ShowList from '../List/ShowList';
+import { useContext, useEffect } from 'react';
+import { UserContext } from '../../context/UserContext';
 
+
+const UserInfo = ({ datas }) => {
+  // console.log('userinfo render!');
+  useEffect(() => {
+    return () => {
+      // console.log('userInfo 언마운트');
+    }
+  }, [])
+  // console.log('userinfo랜더링!');
+  const {isYou, isFollowee, postNums, followers, followees, article} = datas.data
+
+  const {userID} = useContext(UserContext)
+  // console.log('profilePage의', userID, '여긴 UserInfo');
+  const showFollowers = () => {
+    // console.log('list');
+  }
   return(
     <div className={style["flex-container"]}>
       {/* <FollowButton/> */}
@@ -21,12 +38,14 @@ const UserInfo = ({ userID, datas }) => {
             <span className={style.tag}>게시물</span>
             <span className={style.num}>{postNums}</span>
           </div>
-          <div className={style.group}>
-            <span className={style.tag}>팔로워</span>
+          <div className={`${style.group} ${style.list}`}>
+            {/* <span className={style.tag}>팔로워</span> */}
+            <ShowList text = "팔로워"/>
             <span className={style.num}>{followers}</span>
           </div>
-          <div className={style.group}>
-            <span className={style.tag}>팔로우</span>
+          <div className={`${style.group} ${style.list}`}>
+            {/* <span className={style.tag}>팔로우</span> */}
+            <ShowList text = "팔로우"/>
             <span className={style.num}>{followees}</span>
           </div>
         </div>

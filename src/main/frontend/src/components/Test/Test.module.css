@@ -1,0 +1,19 @@
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 40%);
+
+  /* 리스트창 중앙정렬 하기위함 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.list {
+  width: 500px;
+  height: 500px;
+  border: 1px solid black;
+}

@@ -19,7 +19,7 @@ public class AuthController {
         this.authService = authService;
     }
 
-    @PostMapping("/users")
+    @PostMapping("/signUp")
     public ResponseEntity<ResponseDTO> registerUser(@RequestBody SignupRequestDTO request) {
         ResponseDTO response = authService.registerUser(request);
         return ResponseEntity.status(response.getStatus()).body(response);

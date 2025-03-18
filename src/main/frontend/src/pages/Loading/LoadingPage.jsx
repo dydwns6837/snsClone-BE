@@ -1,4 +1,4 @@
-import Skeleton from "../components/Skeleton/Skeleton";
+import Skeleton from "../../components/Skeleton/Skeleton";
 import style from "./LoadingPage.module.css"
 export default function LoadingPage() {
 

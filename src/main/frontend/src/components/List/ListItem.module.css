@@ -1,0 +1,13 @@
+.item {
+  /* padding: 20px 0px; */
+  display: flex;
+  padding: 10px 0px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.profile {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}

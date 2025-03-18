@@ -49,7 +49,7 @@ public class UserController {
         return ResponseEntity.status(response.getStatus()).body(response);
     }
 
-    @GetMapping("/profile/{userId}")
+    @GetMapping("/{userId}/profile")
     public ResponseEntity<ResponseDTO> getUserProfile(
             @PathVariable("userId") String nickName,
             @RequestHeader("Authorization") String authorizationHeader

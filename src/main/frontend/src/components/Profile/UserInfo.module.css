@@ -1,6 +1,7 @@
 .flex-container {
   display: flex;
-  height: 400px;
+  /* height: 400px; */
+  height: 300px;
   align-items: center;
   border-bottom: 1px solid rgb(225, 225, 225);
 }
@@ -52,6 +53,9 @@
   display: flex;
   align-items: center;
   gap: 5px;
+}
+
+.list {
   cursor: pointer;
 }
 
