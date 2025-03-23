@@ -2,6 +2,7 @@ package com.example.snsClone.repository;
 
 import com.example.snsClone.entity.FollowEntity;
 import com.example.snsClone.entity.UserEntity;
+import org.apache.catalina.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -21,4 +22,5 @@ public interface FollowRepository extends JpaRepository<FollowEntity, Long> {
 
     List<FollowEntity> findAllByFollowing(UserEntity following);
 
+    List<FollowEntity> findAllByFollower(UserEntity follower);
 }

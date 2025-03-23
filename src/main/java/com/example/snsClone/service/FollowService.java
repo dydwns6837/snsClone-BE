@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 public class FollowService {
@@ -88,12 +89,13 @@ public class FollowService {
             UserEntity targetUser = userRepository.findByNickName(nickName)
                     .orElseThrow(() -> new IllegalArgumentException("언팔로우 대상 사용자를 찾을 수 없습니다."));
 
+
             // 5. 팔로우 엔티티 찾기
             FollowEntity follow = followRepository.findByFollowerAndFollowing(loginUser, targetUser)
-                    .orElseThrow(() -> new RuntimeException("팔로우 관계가 없습니다."));
-
-            // 6. 언팔로우 (팔로우 관계 삭제)
+                    .orElseThrow(() -> new RuntimeException("팔로우 관계없음"));
             followRepository.delete(follow);
+
+
 
             // 7. 성공 응답
             return ResponseEntity.ok(new ResponseDTO(200, true, "언팔로우 성공"));
@@ -131,10 +133,46 @@ public class FollowService {
                     })
                     .toList();
 
-            return ResponseEntity.ok(new ResponseDTO(200, true, "팔로우 목록 조회", followerList));
+            return ResponseEntity.ok(new ResponseDTO(200, true, "팔로워 목록 조회", followerList));
         } catch (Exception e) {
 
         }
         return ResponseEntity.status(500).body(new ResponseDTO(500, false, "팔로워 목록 조회 실패"));
+    }
+
+    public ResponseEntity<ResponseDTO> getFollowings(String nickName, String authorizationHeader) {
+        try {
+            // 1. 토큰꺼내오기 (3/20 일인 오늘까지만 이방법으로 토큰 가져오고 이후에는 filter공부해서 편하게 가져오기)
+            // 그런김에 주석으로 총정리겸 직접해보기.
+            String token = authorizationHeader.substring(7);
+
+            // 2. 꺼내온 토큰을 jwtuiil에서 해독후에 변수에 담기(왜? 인가된 사용자 인지 확인하려고)
+            String userEmail = jwtUtil.extractEmail(token);
+
+            // 3. userEmail이 db에 저장되어 로그인한 이메일이랑 똑같은지 비교
+            UserEntity loginUser = userRepository.findByEmail(userEmail)
+                    .orElseThrow(() -> new RuntimeException(""));
+
+            // 4. db에 저장된 닉네임으로 대상 찾기.
+            UserEntity targetUser = userRepository.findByNickName(nickName)
+                    .orElseThrow(() -> new RuntimeException(""));
+
+            // 5. 팔로잉 목록 조회
+            List<FollowEntity> followings = followRepository.findAllByFollower(targetUser);
+
+            // 6. 팔로잉 목록에서 targetUser의 정보를 map에 담아 뿌리기
+            List<Map<String, String>> followingList = followings.stream()
+                    .map(f -> {
+                        Map<String, String> map = new HashMap<>();
+                        map.put("userID", f.getFollowing().getNickName());
+                        return map;
+                    })
+                    .toList();
+            return ResponseEntity.ok(new ResponseDTO(200, true, "팔로잉 목록 조회", followingList));
+
+        } catch (Exception e) {
+
+        }
+        return ResponseEntity.status(500).body(new ResponseDTO(500, false, "팔로잉 목록 조회 실패"));
     }
 }

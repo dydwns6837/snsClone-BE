@@ -34,6 +34,7 @@ public class FollowController {
         return followService.unfollow(nickName, authorizationHeader);
     }
 
+    //팔로워 목록조회
     @GetMapping("/users/{userId}/followers")
     public ResponseEntity<ResponseDTO> getFollowers(
             @PathVariable("userId") String nickName,
@@ -42,5 +43,13 @@ public class FollowController {
         return followService.getFollowers(nickName, authorizationHeader);
     }
 
+    //팔로잉 목록조회
+    @GetMapping("/users/{userId}/followings")
+    public ResponseEntity<ResponseDTO> getFollowings(
+            @PathVariable("userId") String nickName,
+            @RequestHeader("Authorization") String authorizationHeader
+    ) {
+        return followService.getFollowings(nickName, authorizationHeader);
+    }
 
 }

@@ -39,6 +39,8 @@ public class UserController {
         return ResponseEntity.ok("회원 탈퇴 완료");
     }
 
+
+    // 사용자 닉네임 얻어오기
     @GetMapping("/userID")
     public ResponseEntity<ResponseDTO> getMyNickname(@RequestHeader("Authorization") String token) {
 
@@ -49,6 +51,7 @@ public class UserController {
         return ResponseEntity.status(response.getStatus()).body(response);
     }
 
+    // 사용자 프로필 조회
     @GetMapping("/{userId}/profile")
     public ResponseEntity<ResponseDTO> getUserProfile(
             @PathVariable("userId") String nickName,

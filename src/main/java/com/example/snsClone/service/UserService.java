@@ -105,7 +105,7 @@ public class UserService {
         // 로그인한 유저가 본인인가?
         boolean isYou = loginUser.getId().equals(profileUser.getId());
 
-        // 인사말 (기본값 / 프로필에서 따로 저장해뒀으면 가져오면 됨) 아직 저장안해서 string으로 임시 인사말.
+        // 인사말 (기본값 / 프로필에서 따로 저장해뒀으면 가져오면 됨) 아직 저장안해서 string " " 으로 임시 인사말.
         String article = "안녕하세요! 인사말이에요.";
 
         // 응답 데이터 맵에 담기
