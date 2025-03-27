@@ -7,8 +7,9 @@ import Button from "../Button/Button"
 import styles from "./LoginForm.module.css"
 
 const tokenAtClient = () => {
-  return localStorage.getItem("access_token")
-  // 이게 서버에 요청보내고 응답 받는거라면?
+  const isToken = localStorage.getItem("access_token") ? true : false
+  console.log(isToken);
+  return isToken
 }
 
 const LoginForm = ({ setIsAuth }) => {
@@ -68,7 +69,7 @@ const LoginForm = ({ setIsAuth }) => {
       const { message, accessToken } = await response.json()
       localStorage.setItem('access_token', accessToken)
       setAlert(message) // 얘땜에 리랜더링이 발생하는건가??
-      setIsAuth(tokenAtClient())
+      setIsAuth(tokenAtClient()) //setIsAuth(true)
 
     } catch (error) {
       setAlert("알수없는 오류에요")

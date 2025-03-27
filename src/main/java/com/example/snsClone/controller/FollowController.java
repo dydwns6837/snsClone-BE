@@ -52,4 +52,15 @@ public class FollowController {
         return followService.getFollowings(nickName, authorizationHeader);
     }
 
+
+    // 로그인 사용자 기준 팔로워 삭제
+    @DeleteMapping("/api/users/{userId}/removeFollower")
+    public ResponseEntity<ResponseDTO> removeFollower(
+            @PathVariable("userId") String nickName,
+            @RequestHeader("Authorization") String authorizationHeader
+    ) {
+        return followService.removeFollower(nickName, authorizationHeader);
+    }
+
+
 }

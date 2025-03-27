@@ -67,7 +67,7 @@ public class UserService {
             }
 
             // 4. 닉네임 반환 성공
-            return new ResponseDTO(200, true, user.getNickName());
+            return new ResponseDTO(200, true, "사용자의 닉네임 입니다." , user.getNickName());
 
         } catch (Exception e) {
             return new ResponseDTO(500, false, "서버 오류가 발생했습니다.");

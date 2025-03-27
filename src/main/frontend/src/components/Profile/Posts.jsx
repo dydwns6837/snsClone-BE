@@ -6,6 +6,7 @@ import { ModalContext } from "../../context/ModalContext"
 import style from "./Posts.module.css"
 import style2 from "../Modal/OverLay.module.css"
 
+// 이 위치에서 각 post의 id? 에 해당하는 정보를 요청하고 받아야함
 const Article = () => {
   //  모달창 마운트 되고, 데이터 요청해서, 댓글과 좋아요 정보를 불러오고 표시한다.
   // 랜더링 > 마운트 >
@@ -45,7 +46,7 @@ const Posts = ({content}) => {
     setIsOpen(prev => !prev)
   }
 
-  console.log('post랜더링!');
+  // console.log('post랜더링!');
   return (
     <ModalContext.Provider value={{isOpen, modalHandler}}>
       <div className={style.item} onClick={modalHandler}>{}</div>

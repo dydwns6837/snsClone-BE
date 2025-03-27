@@ -113,13 +113,6 @@ const followings = [
 
 const List = ({ handler, toFind }) => {
 
-  useEffect(() => {
-    // console.log('list mount');
-    return () => {
-      // console.log('list unmount');
-    }
-  }, [])
-
   const [data, setData] = useState([])
   const [isLoading, setIsLoading] = useState(true)
   const [keyWord, setKeyWord] = useState("")
@@ -128,19 +121,13 @@ const List = ({ handler, toFind }) => {
   // console.log('profilePage의', userID, '여긴 List');
 
   const fetchData = async () => {
-    // console.log(toFind, '보기');
     try {
-      const response = await fetch(`http://localhost:8080/api/users/${userID}/${toFind}`, {
-        method: "GET",
-        headers: {
-          "Authorization": `Bearer ${localStorage.getItem("access_token")}`
-        }
-      });
-
-      const data = await response.json()
-
+      console.log(userID, toFind);
+      const response = await fetch(`http://localhost:8080/api/users/${userID}/${toFind}`)
+      const datas = await response.json()
+      const list = datas.data
       // console.log(data);
-      setData(data.data);
+      setData(list)
       // setData(arr2)
 
     } catch(err) {
@@ -150,7 +137,7 @@ const List = ({ handler, toFind }) => {
     }
   }
   
-  const filteredFollowers = data?.filter(follower => {
+  const filteredFollowers = data.filter(follower => {
     return follower.userID.includes(keyWord)
   })
   // console.log(filteredFollowers);
@@ -201,7 +188,8 @@ const List = ({ handler, toFind }) => {
       filteredFollowers.length ? (
         filteredFollowers.map((el, idx) => {
           // return <div>{el.name}</div>
-          return <ListItem member = {el} key={idx}/>
+          return <ListItem member = {el} key={idx} toFind = {toFind}/>
+          // 이거 나중에 문제생기면 key 값용 entity ID가져와서 쓸수도
         })
       ):(
         <div>결과없음</div>

@@ -1,0 +1,15 @@
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* 3열로 구성 */
+  gap: 30px; /* 항목 간 간격 */
+  padding: 20px;
+
+  /* width: 100%; */
+  margin: auto;
+  max-width: 800px;
+
+  justify-items: center; /* 중앙 정렬 */
+  /* width: 100%; */
+  /* max-width: 1200px; 갤러리 최대 크기 */
+  /* margin: auto; */
+}

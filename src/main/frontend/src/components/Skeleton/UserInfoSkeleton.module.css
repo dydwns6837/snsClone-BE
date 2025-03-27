@@ -1,0 +1,28 @@
+/* .inner {
+  width: 1000px;
+  margin: auto;
+} */
+
+.flex-container {
+  display: flex;
+  /* height: 400px; */
+  height: 300px;
+  align-items: center;
+  border-bottom: 1px solid rgb(225, 225, 225);
+}
+
+.image-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: 3;
+}
+
+.lines-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  padding-left: 100px;
+  height: 240px;
+  flex: 7;
+}

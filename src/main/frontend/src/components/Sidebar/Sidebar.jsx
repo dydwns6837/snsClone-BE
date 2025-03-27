@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useContext } from "react";
+import { UserContext } from "../../context/UserContext";
 import { Link } from "react-router-dom"
 import style from "./Sidebar.module.css"
 
@@ -8,30 +9,8 @@ import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOu
 import PersonOutlinedIcon from '@mui/icons-material/PersonOutlined';
 
 const Sidebar = () => {
-  const [userID, setUserID] = useState(null)
-
-  const getUserId = async () => {
-    try {
-      const response = await fetch("http://localhost:8080/api/users/userID", {
-        headers : { Authorization : `Bearer ${localStorage.getItem("access_token")}`}
-      })
-      // console.log('어디로갔을까');
-      if(!response.ok) { // 응답이 정상이 아니라면
-        // setUserID('hey')
-        alert('토큰이 없거나, 잘못되었대요');
-        return
-      }
-      const data = await response.json() //얘 조심해야됌 response가 비정상이라면 json()을 시도하지못하게 해야함 위에서 조기리턴
-      const userID = data.message
-      // const userID = data.userID
-      setUserID(userID)
-    } catch(err) {
-      console.log(err);
-    }
-  }
-  useEffect(() => {
-    getUserId()
-  }, [])
+  const {curUserID} = useContext(UserContext)
+  // console.log(userID);
   return(
     <nav>
       <div className={style.logo}>
@@ -56,7 +35,7 @@ const Sidebar = () => {
           </Link>
         </li>
         <li>
-          <Link to= {`/${userID}`}>
+          <Link to= {`/${curUserID}`}>
           <PersonOutlinedIcon fontSize="large"/>프로필
           </Link>
         </li>

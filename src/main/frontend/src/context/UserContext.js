@@ -1,7 +1,6 @@
-import { createContext, useContext } from "react";
+import { createContext } from "react";
 
 // Context 생성
-// const UserContext = createContext(null);
 export const UserContext = createContext(null);
 
 // Context를 쉽게 사용할 수 있는 커스텀 훅

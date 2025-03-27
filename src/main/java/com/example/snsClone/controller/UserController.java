@@ -52,9 +52,9 @@ public class UserController {
     }
 
     // 사용자 프로필 조회
-    @GetMapping("/{userId}/profile")
+    @GetMapping("/{userID}/profile")
     public ResponseEntity<ResponseDTO> getUserProfile(
-            @PathVariable("userId") String nickName,
+            @PathVariable("userID") String nickName,
             @RequestHeader("Authorization") String authorizationHeader
     ) {
         return userService.getUserProfile(nickName, authorizationHeader);

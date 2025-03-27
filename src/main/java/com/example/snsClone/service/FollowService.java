@@ -93,8 +93,10 @@ public class FollowService {
             // 5. 팔로우 엔티티 찾기
             FollowEntity follow = followRepository.findByFollowerAndFollowing(loginUser, targetUser)
                     .orElseThrow(() -> new RuntimeException("팔로우 관계없음"));
-            followRepository.delete(follow);
 
+
+            //6 삭제
+            followRepository.delete(follow);
 
 
             // 7. 성공 응답
@@ -174,5 +176,36 @@ public class FollowService {
 
         }
         return ResponseEntity.status(500).body(new ResponseDTO(500, false, "팔로잉 목록 조회 실패"));
+    }
+
+    public ResponseEntity<ResponseDTO> removeFollower (String nickName, String authorizationHeader) {
+        try {
+            // 1. 토큰에서 Bearer 제거
+            String token = authorizationHeader.substring(7);
+
+            // 2. JWT에서 이메일 추출
+            String userEmail = jwtUtil.extractEmail(token);
+
+            // 3. 로그인한 사용자 찾기
+            UserEntity loginUser = userRepository.findByEmail(userEmail)
+                    .orElseThrow(() -> new RuntimeException("로그인한 사용자를 찾을 수 없습니다."));
+
+            // 4. 팔로우한 사용자 찾기
+            UserEntity targetUser = userRepository.findByNickName(nickName)
+                    .orElseThrow(() -> new IllegalArgumentException("팔로우한 대상 사용자를 찾을 수 없습니다."));
+
+            // 5. 팔로워 엔티티 찾기
+            FollowEntity follow = followRepository.findByFollowerAndFollowing(targetUser, loginUser)
+                    .orElseThrow(() -> new RuntimeException("팔로우 관계없음"));
+
+            //6 삭제
+            followRepository.delete(follow);
+
+            // 7. 성공 응답
+            return ResponseEntity.ok(new ResponseDTO(200, true, "언팔로우 성공"));
+
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(new ResponseDTO(500, false, "언팔로우 중 오류 발생"));
+        }
     }
 }

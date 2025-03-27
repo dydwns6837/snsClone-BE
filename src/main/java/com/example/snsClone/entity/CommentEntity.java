@@ -1,32 +1,27 @@
 package com.example.snsClone.entity;
 
-
 import jakarta.persistence.*;
 import lombok.Getter;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-
 @Getter
 @Entity
-@Table(name = "post")
-public class PostEntity {
-
+@Table(name = "comment")
+public class CommentEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // 작성한 사용자 (글쓴이)
+    // 게시글과 연관
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "post_id", nullable = false)
+    private PostEntity post;
+
+    // 작성자와 연관
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private UserEntity user;
 
-    private String image;
+    // 댓글 내용
+    @Column(nullable = false)
     private String context;
-
-    @OneToMany(mappedBy = "post")
-    private List<CommentEntity> comments = new ArrayList<>();
-
-    private LocalDateTime createdAt;
 }
