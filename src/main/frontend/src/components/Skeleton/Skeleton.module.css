@@ -1,5 +1,6 @@
 .skeleton {
   background-color: rgb(233, 233, 233);
+  flex-shrink: 0;
 }
 
 .article {

@@ -40,11 +40,12 @@ public class SecurityConfig {
                 .cors(Customizer.withDefaults())
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers( // 스웨거 관련
+                                "/v3/api-docs/**", "/swagger-ui/**" , "/swagger-resources/**",  "/error"
+                        )
+                        .permitAll()
                         .requestMatchers(
-                                "/api/login",
-                                "/api/signUp",
-                                "/api/users/**",
-                                "/api/**"
+                                "/api/login", "/api/signUp", "/api/users/**", "/api/**"
                         ).permitAll()
 
                         .anyRequest().authenticated()

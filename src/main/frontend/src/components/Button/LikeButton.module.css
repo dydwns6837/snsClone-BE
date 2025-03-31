@@ -1,0 +1,16 @@
+.likebutton {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+.likebutton svg {
+  padding: 5px 5px 0px 5px;
+  vertical-align: middle;
+}
+.likebutton span {
+  color: rgb(0, 0, 0);
+  font-size: 14px;
+  position: absolute;
+  left: 40px;
+  top: 10px;
+}

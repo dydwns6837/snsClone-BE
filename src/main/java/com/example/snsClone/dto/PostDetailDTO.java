@@ -26,5 +26,7 @@ public class PostDetailDTO {
         this.createdAt = createdAt;
         this.context = context;
         this.comments = comments;
+
     }
+
 }

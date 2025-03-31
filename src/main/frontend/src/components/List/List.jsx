@@ -123,7 +123,11 @@ const List = ({ handler, toFind }) => {
   const fetchData = async () => {
     try {
       console.log(userID, toFind);
-      const response = await fetch(`http://localhost:8080/api/users/${userID}/${toFind}`)
+      const response = await fetch(`http://localhost:8080/api/users/${userID}/${toFind}`, {
+        headers : {
+          Authorization : `Bearer ${localStorage.getItem("access_token")}`
+        }        
+      })
       const datas = await response.json()
       const list = datas.data
       // console.log(data);

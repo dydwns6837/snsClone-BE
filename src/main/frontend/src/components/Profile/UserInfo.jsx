@@ -24,10 +24,10 @@ const UserInfo = ({ datas }) => { // 얘 자식 컴포넌트에, 팔로우/팔�
   // console.log('userinfo랜더링!');
   const {isYou, isFollowee, postNums, followers, followees, article} = datas
 
-  console.log(useContext(UserContext));
+  // console.log(useContext(UserContext));
   const parentContext = useContext(UserContext)
   const {userID} = useContext(UserContext)
-  console.log('profilePage의', userID, '여긴 UserInfo');
+  // console.log('profilePage의', userID, '여긴 UserInfo');
   return(
     <div className={style["flex-container"]}>
       <div className={style["image-wrapper"]}>

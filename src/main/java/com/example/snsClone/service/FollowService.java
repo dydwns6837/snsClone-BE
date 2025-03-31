@@ -137,9 +137,8 @@ public class FollowService {
 
             return ResponseEntity.ok(new ResponseDTO(200, true, "팔로워 목록 조회", followerList));
         } catch (Exception e) {
-
+            return ResponseEntity.status(500).body(new ResponseDTO(500, false, "팔로워 목록 조회 실패"));
         }
-        return ResponseEntity.status(500).body(new ResponseDTO(500, false, "팔로워 목록 조회 실패"));
     }
 
     public ResponseEntity<ResponseDTO> getFollowings(String nickName, String authorizationHeader) {
@@ -173,9 +172,8 @@ public class FollowService {
             return ResponseEntity.ok(new ResponseDTO(200, true, "팔로잉 목록 조회", followingList));
 
         } catch (Exception e) {
-
+            return ResponseEntity.status(500).body(new ResponseDTO(500, false, "팔로잉 목록 조회 실패"));
         }
-        return ResponseEntity.status(500).body(new ResponseDTO(500, false, "팔로잉 목록 조회 실패"));
     }
 
     public ResponseEntity<ResponseDTO> removeFollower (String nickName, String authorizationHeader) {

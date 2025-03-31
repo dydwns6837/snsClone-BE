@@ -6,6 +6,7 @@ import com.example.snsClone.dto.ResponseDTO;
 import com.example.snsClone.entity.PostEntity;
 import com.example.snsClone.entity.PostLikeEntity;
 import com.example.snsClone.entity.UserEntity;
+import com.example.snsClone.repository.CommentRepository;
 import com.example.snsClone.repository.PostLikeRepository;
 import com.example.snsClone.repository.PostRepository;
 import com.example.snsClone.repository.UserRepository;
@@ -22,13 +23,15 @@ public class PostService {
     private final PostRepository postRepository;
     private final UserRepository userRepository;
     private final PostLikeRepository postLikeRepository;
+    private final CommentRepository commentRepository;
     private final JwtUtil jwtUtil;
 
     public PostService(PostRepository postRepository, UserRepository userRepository,
-                       PostLikeRepository postLikeRepository, JwtUtil jwtUtil) {
+                       PostLikeRepository postLikeRepository, CommentRepository commentRepository,JwtUtil jwtUtil) {
         this.postRepository = postRepository;
         this.userRepository = userRepository;
         this.postLikeRepository = postLikeRepository;
+        this.commentRepository = commentRepository;
         this.jwtUtil = jwtUtil;
     }
 
@@ -51,6 +54,13 @@ public class PostService {
                     Map<String, Object> map = new HashMap<>();
                     map.put("postID", String.valueOf(post.getId()));
                     map.put("imageURL", post.getImage());
+
+                    int likeCount = postLikeRepository.countByPost(post);
+                    int commentCount = commentRepository.countByPost(post);
+
+                    map.put("likes", likeCount);
+                    map.put("comments", commentCount);
+
                     return map;
                 })
                 .toList();

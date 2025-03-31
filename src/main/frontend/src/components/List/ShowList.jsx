@@ -10,7 +10,7 @@ const ShowList = ({ text, nums }) => {
   const [isOpen, setIsOpen] = useState(false)
   // const Parentcontext = useContext(UserContext)
   const {userID } = useContext(UserContext)
-  console.log('profilePage의', userID, '여긴 UserInfo안의 ShowList');
+  // console.log('profilePage의', userID, '여긴 UserInfo안의 ShowList');
   const toFind = text === "팔로워" ? "followers" : "followings"
 
   const handler = () => {
