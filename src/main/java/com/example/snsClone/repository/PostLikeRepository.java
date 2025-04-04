@@ -6,6 +6,7 @@ import com.example.snsClone.entity.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -16,4 +17,6 @@ public interface PostLikeRepository extends JpaRepository<PostLikeEntity, Long> 
     int countByPost(PostEntity post);
 
     Optional<PostLikeEntity> findByUserAndPost(UserEntity user, PostEntity post);
+
+    List<PostLikeEntity> findAllByPost(PostEntity post);
 }

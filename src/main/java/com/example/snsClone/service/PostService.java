@@ -6,10 +6,7 @@ import com.example.snsClone.dto.ResponseDTO;
 import com.example.snsClone.entity.PostEntity;
 import com.example.snsClone.entity.PostLikeEntity;
 import com.example.snsClone.entity.UserEntity;
-import com.example.snsClone.repository.CommentRepository;
-import com.example.snsClone.repository.PostLikeRepository;
-import com.example.snsClone.repository.PostRepository;
-import com.example.snsClone.repository.UserRepository;
+import com.example.snsClone.repository.*;
 import com.example.snsClone.security.jwt.JwtUtil;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -24,14 +21,17 @@ public class PostService {
     private final UserRepository userRepository;
     private final PostLikeRepository postLikeRepository;
     private final CommentRepository commentRepository;
+    private final FollowRepository followRepository;
     private final JwtUtil jwtUtil;
 
     public PostService(PostRepository postRepository, UserRepository userRepository,
-                       PostLikeRepository postLikeRepository, CommentRepository commentRepository,JwtUtil jwtUtil) {
+                       PostLikeRepository postLikeRepository, CommentRepository commentRepository,
+                       FollowRepository followRepository, JwtUtil jwtUtil) {
         this.postRepository = postRepository;
         this.userRepository = userRepository;
         this.postLikeRepository = postLikeRepository;
         this.commentRepository = commentRepository;
+        this.followRepository = followRepository;
         this.jwtUtil = jwtUtil;
     }
 
@@ -129,4 +129,41 @@ public class PostService {
             return ResponseEntity.ok(new ResponseDTO(200, true, "따봉~"));
         }
     }
+
+    public ResponseDTO getUserLikes(String authorizationHeader, Long postId) {
+        // 1. 로그인한 사용자 정보 추출
+        String token = authorizationHeader.substring(7);
+        String userEmail = jwtUtil.extractEmail(token);
+
+        UserEntity loginUser = userRepository.findByEmail(userEmail)
+                .orElseThrow(() -> new RuntimeException("사용자 없음"));
+
+        // 2. 게시글 조회
+        PostEntity post = postRepository.findById(postId)
+                .orElseThrow(() -> new RuntimeException("해당 게시글이 존재하지 않습니다."));
+
+        // 3. 해당 게시글에 눌린 좋아요 전체 조회
+        List<PostLikeEntity> likeList = postLikeRepository.findAllByPost(post);
+
+        // 4. 좋아요 누른 사용자 정보와 로그인 유저가 팔로우 중인지 확인
+        List<Map<String, Object>> responseData = new ArrayList<>();
+
+        for (int i = 0; i < likeList.size(); i++) {
+            PostLikeEntity like = likeList.get(i);
+            UserEntity likedUser = like.getUser();
+
+            // 로그인 유저가 이 사용자를 팔로우하고 있는지 여부
+            boolean isFollow = followRepository.existsByFollowerAndFollowing(loginUser, likedUser);
+
+            Map<String, Object> userMap = new HashMap<>();
+            userMap.put("userID", likedUser.getNickName());
+            userMap.put("isFollow", isFollow);
+
+            responseData.add(userMap);
+        }
+
+        // 5. 응답 반환
+        return new ResponseDTO(200, true, "좋아요 누른 유저 목록 조회 성공", responseData);
+    }
+
 }

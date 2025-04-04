@@ -10,6 +10,8 @@ import io.swagger.v3.oas.models.Components;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+// swagger 기본주소 http://localhost:8080/swagger-ui/index.html#/
+
 @Configuration
 public class SwaggerConfig {
 
