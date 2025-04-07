@@ -5,6 +5,8 @@ import com.example.snsClone.service.PostService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping("/api")
 public class PostController {
@@ -43,11 +45,30 @@ public class PostController {
     }
 
     // 좋아요 누른 사용자들 목록 조회
-    @GetMapping("/post/{postId}/userLikes")
+    @GetMapping("/posts/{postId}/userLikes")
     public ResponseDTO getUserLikes(
             @RequestHeader("Authorization") String authorizationHeader,
             @PathVariable Long postId) {
 
         return postService.getUserLikes(authorizationHeader, postId);
+    }
+
+    // 게시글에 댓글 추가
+    @PostMapping("/posts/{postId}/newComments")
+    public ResponseEntity<ResponseDTO> addComments(
+            @RequestHeader("Authorization") String authorizationHeader,
+            @PathVariable Long postId,
+            @RequestBody Map<String, String> requestBody) {
+            // 지피티 선생님께서 map보다 dto로 담아서 보내는게 좋다고하셨찌만 map으로 해봤습니다.
+        String commentText = requestBody.get("context");
+        return postService.addComments(authorizationHeader, postId, commentText);
+    }
+
+    @DeleteMapping("/posts/{postID}")
+    public ResponseEntity<ResponseDTO> deletePosts(
+            @PathVariable("postID") Long postID,
+            @RequestHeader("Authorization") String authorizationHeader
+    ) {
+        return postService.deletePosts(postID, authorizationHeader);
     }
 }

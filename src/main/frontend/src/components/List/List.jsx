@@ -117,6 +117,7 @@ const List = ({ handler, toFind }) => {
   const [isLoading, setIsLoading] = useState(true)
   const [keyWord, setKeyWord] = useState("")
 
+  const [dupPop, setDupPop] = useState(false)
   const {userID} = useContext(UserContext)
   // console.log('profilePage의', userID, '여긴 List');
 
@@ -146,9 +147,17 @@ const List = ({ handler, toFind }) => {
   })
   // console.log(filteredFollowers);
 
+  /// 이거 왜 dependency에 넣은건지 이해가 안감
   useEffect(() => {
+    console.log('effect!');
     const handleKeyDown = e => {
-      if(e.key === "Escape") handler()
+      if(e.key === "Escape") {
+        if(dupPop) {
+          setDupPop(false)
+        } else {
+          handler()
+        }
+      } 
     }
     document.addEventListener("keydown", handleKeyDown)
     // console.log('effect!');
@@ -157,7 +166,7 @@ const List = ({ handler, toFind }) => {
     return () => {
       document.removeEventListener("keydown", handleKeyDown)
     }
-  }, [])
+  }, [dupPop])
 
   const changeHandler = e => {
     // console.log(e.target.value);
@@ -171,7 +180,7 @@ const List = ({ handler, toFind }) => {
       <div className={style.head}>
         <span className={style.text}>{toFind == "followers" ? "팔로워" : "팔로잉"}</span>
         <button className={style.closeButton} onClick={e => {
-          e.stopPropagation()
+          // e.stopPropagation()
           // console.log('x버튼 트리거');
           // if(e.target == e.currentTarget) handler()
           handler()

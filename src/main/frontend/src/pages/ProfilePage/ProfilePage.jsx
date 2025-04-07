@@ -19,7 +19,6 @@ const ProfilePage = () => {
   console.log(userID);
   // console.log('profilePage params', userID);
   const [isLoading, setLoading] = useState(true)
-
   const [userData, setUserData] = useState(null)
   const [userPosts, setUserPosts] = useState(null)
   // console.log(isLoading, userData, userPosts);
@@ -61,10 +60,9 @@ const ProfilePage = () => {
 
       // console.log('after start fetch');
       const userDatas = await fetchUserData // 1초소요
-      // console.log(userData.data);
+      // console.log(userData);
       setUserData(userDatas.data)
-      const userPostDatas = await fetchUserPosts // 얘까지 기다리면 isLoading이 false일틈이없어서 blinking사라지긴함 but
-      // console.log(userData.data);
+      const userPostDatas = await fetchUserPosts // 얘까지 기다리면 isLoading이 false일틈이없어서 blinking사라지긴함 but 
       setUserPosts(userPostDatas.data)
 
     } catch (error) {

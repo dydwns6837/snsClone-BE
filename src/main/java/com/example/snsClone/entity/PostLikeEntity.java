@@ -2,12 +2,14 @@ package com.example.snsClone.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Setter
 @Getter
 @Entity
-@Table(name = "postLike")
+@NoArgsConstructor
+@Table(name = "post_like")
 public class PostLikeEntity {
 
     @Id

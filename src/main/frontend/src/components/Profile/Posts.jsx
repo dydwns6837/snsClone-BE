@@ -1,11 +1,16 @@
 import { useEffect, useState } from "react"
 import { createPortal } from 'react-dom'
 import { useContext } from "react"
+
 import { ModalContext } from "../../context/ModalContext"
 import { PostModalContext } from "../../context/PostModalContext"
+import { UserContext } from "../../context/UserContext"
 
 import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
 import ModeCommentOutlinedIcon from '@mui/icons-material/ModeCommentOutlined';
+
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
 
 import style from "./Posts.module.css"
 import modalStyle from "../Modal/OverLay.module.css"
@@ -20,14 +25,22 @@ import { Link } from "react-router-dom"
 const Article = () => {
   //  모달창 마운트 되고, 데이터 요청해서, 댓글과 좋아요 정보를 불러오고 표시한다.
   // 랜더링 > 마운트 >
-  const [isLoading, setIsLoading] = useState(true)
+  const [isLoading, setIsLoading] = useState(false)
   const [info, setInfo] = useState({})
-  
+  const [comment, setComment] = useState("")
+
   const {isOpen, modalHandler} = useContext(ModalContext)
-  const {postID, userID} = useContext(PostModalContext)
-  console.log(postID, userID, 'context');
-  console.log(info);
+  
+  const {userID} = useContext(UserContext)
+  const {postID} = useContext(PostModalContext)
+  // console.log(postID, userID, 'contetext');
+  // console.log(info);
+
+  const [isSecondOpen, setIsSecondOpen] = useState(false)
+
+
   const getInfos = async () => {
+    setIsLoading(true)
     // const sleep = await new Promise((res, rej) => {
     //   setTimeout(() => {
     //     res("댓글과 좋아요 데이터!!")
@@ -44,30 +57,99 @@ const Article = () => {
     setIsLoading(false)
   }
 
+  const changeHandler = e => {
+    // console.log(e.target.value);
+    setComment(e.target.value)
+  }
+
+  const submitHandler = async e => {
+    setComment("")
+    e.preventDefault()
+    console.log('submit!');
+    console.log(comment);
+    try {
+      const response = await fetch(`http://localhost:8080/api/posts/${postID}/new-comments`, {
+        method : "POST",
+        headers : {
+          "Content-Type": "application/json",
+          Authorization : `Bearer ${localStorage.getItem("access_token")}`
+        },
+        body : JSON.stringify({ context : comment })
+      })
+
+      if(!response.ok) return
+      const {message} = await response.json()
+      console.log(message);
+
+      getInfos()
+    } catch(err) {
+      console.error(err)
+    }
+  }
+
+  const deletePost = async () => {
+    try {
+      const response = await fetch(`http://localhost:8080/api/posts/${postID}`, {
+        method : "DELETE", 
+        headers : {
+          Authorization : `Bearer ${localStorage.getItem("access_token")}`
+        }
+      })
+
+      if(!response.ok) return
+      const {data} = await response.json()
+      console.log(data);
+
+    } catch(err) {
+      console.error(err)
+    }
+  }
+
+
+  useEffect(() => {
+    getInfos()
+  }, [])
+
   useEffect(() => {
     const handleKeyDown = e => {
-      if(e.key === "Escape") modalHandler()
+      // 이 Article의 keydown핸들러가 호출되는 시점에, 좋아요 리스트 창이 표시되어있는지
+      // 여부를 알수있다면, return 하는 식으로 제어 가능할것같음 어떻게 그걸 알수있을까
+
+
+      // console.log(e.target, e.currentTarget);
+      // console.log('게시글모달창에서 keydown핸들러');
+      if(e.key === "Escape") {
+        modalHandler()
+
+      }
     }
-    document.addEventListener("keydown", handleKeyDown)
+
+    if(!isSecondOpen) {
+      // console.log('게시글 keydown 핸들러 추가');
+      document.addEventListener("keydown", handleKeyDown)
+    }
     // console.log('effect!');
-    console.log('article modal 마운트');
-    console.log('댓글 및 좋아요 정보를 불러올게요');
-    getInfos()
+    // console.log('article modal 마운트');
+    // console.log('댓글 및 좋아요 정보를 불러올게요');
+    
     return () => {
+      // console.log('게시글 keydown 핸들러 제거');
       document.removeEventListener("keydown", handleKeyDown)
     }
-  }, [])
+  }, [isSecondOpen])
 
   // console.log(isOpen, modalHandler);
   return (
     <div className={modalStyle["modal-overlay"]}  onClick={e => {
-      if(e.target == e.currentTarget) modalHandler()
+      // console.log('클릭이 감지됌!!');
+      if(e.target == e.currentTarget) 
+        modalHandler()
     }}>
       <div className={modalStyle["post-modal"]}>
         {isLoading ? "로딩중" : 
         <>
-          <div className={modalStyle["post-image"]}>
-            <img src={info.imageURL}></img>
+          <div className={modalStyle["post-image"]}>{info.imageURL}
+
           </div>
           <div className={modalStyle["post-content"]}>
             <div className={`${modalStyle["display-row-container"]} ${modalStyle["post-header"]}`}>
@@ -76,7 +158,7 @@ const Article = () => {
                 {/* <div className={modalStyle["profile-img"]}>프로필 사진</div> */}
                 <Link to = {`/${userID}`} className={modalStyle.name}>{userID}</Link>
               {/* </div> */}
-              <div>...</div>
+              <div onClick={deletePost}>...</div>
             </div>
             <div className={modalStyle["scroll-view"]}>
               <div className={`${modalStyle["display-row-container"]} ${modalStyle["post-body"]}`}>
@@ -87,7 +169,7 @@ const Article = () => {
                 <div>{info.context}</div>
               </div>
               <div className={modalStyle["post-comments"]}>
-                {info.comments.map(comment => {
+                {info.comments?.map(comment => {
                 return (
                   <div key={comment.commentID} className={`${modalStyle["display-row-container"]} ${modalStyle["post-comment"]}`}>
                     <Skeleton type={"image"} width={"40px"} height={"40px"}/>
@@ -102,22 +184,23 @@ const Article = () => {
 
             </div>
             <div className= {modalStyle["post-actions"]}>
-              <LikeButton info = {info}/>
+              <LikeButton info = {info} secondOpen = {isSecondOpen} setSecondOpen = {setIsSecondOpen}/>
               {/* <FavoriteBorderOutlinedIcon style = {{fontSize : "30px", padding : "7px", cursor : "pointer", color : "red"}}/> */}
               {/* <ModeCommentOutlinedIcon style = {{fontSize : "28px", padding : "7px", cursor : "pointer"}}/> */}
             {/* <Skeleton type={"image"} width={"40px"} height={"40px"}/> */}
             </div>
             <div className={modalStyle["post-meta"]}>
               {/* <span>{info.likes}</span> */}
-              <span>{"2025년 3월 24일"}</span>
+              <span>{info.createdAt}</span>
             {/* <Skeleton type={"image"} width={"40px"} height={"40px"}/> */}
             </div>
-            <div className={modalStyle["post-comment-form"]}>
+            <form className={modalStyle["post-comment-form"]} onSubmit={submitHandler}>
               {/* <Input placeholder={"댓글 달기..."} style= {{flexGrow : "1", border : "none"}}/> */}
-              <textarea placeholder="댓글 달기"/>
-              <Button text={"게시"} style="blue"/>
+              <textarea placeholder="댓글 달기" value={comment} onChange={changeHandler}/>
+              {/* <submi text={"게시"} style="blue" handler={null}/> */}
+              <Button type="submit" text="게시"/>
             {/* <Skeleton type={"image"} width={"40px"} height={"40px"}/> */}
-            </div>
+            </form>
           </div>
         </>
 
@@ -128,25 +211,37 @@ const Article = () => {
 }
 
 const Posts = ({ data }) => {
-  console.log(data)
+  // console.log(data);
   const [isOpen, setIsOpen] = useState(false)
-  const {postID, userID} = data
-  console.log(postID, userID);
+  // const [isHover, setIsHover] = useState(false)
+  const {postID, likes, comments} = data // 여기서 명세대로면 userID가 없음
+  // console.log(postID, userID);
   // (바둑판에 썸네일은 다 마운트 된 상태) 썸네일을 클릭시 게시글 모달창이 열리고, ^^
 
   const modalHandler = () => {
+    // console.log('이것은 post에서 선언되었던 modal handler');
     setIsOpen(prev => !prev)
   }
 
   // console.log('post랜더링!');
   return (
-    <PostModalContext.Provider value={{postID, userID}}>
+    <PostModalContext.Provider value={{postID}}>
       <ModalContext.Provider value={{isOpen, modalHandler}}>
+        {/* <div className={style.item} onClick={modalHandler} onMouseEnter={() => setIsHover(true)} onMouseLeave={() => setIsHover(false)}> */}
         <div className={style.item} onClick={modalHandler}>
-          {/*<img src={info.imageURL}></img>*/}
-          <img src={data.imageURL} width={200} height={200}></img>
+          {/* {isHover && <div className={style.hover}>{`${likes} ${comments}`}</div>} */}
+          <div className={style.hover}>
+            <div>
+              <FavoriteBorderIcon/>
+              {likes}
+            </div>
+            <div>
+              <ChatBubbleOutlineIcon/>
+              {comments}
+            </div>
+          </div>
         </div>
-        {isOpen ? createPortal(<Article/>, document.body) : null}
+        {isOpen ? createPortal(<Article/>, document.querySelector('#modal')) : null}
       </ModalContext.Provider>
     </PostModalContext.Provider>
     )

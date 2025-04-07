@@ -3,11 +3,14 @@ package com.example.snsClone.service;
 import com.example.snsClone.dto.CommentDTO;
 import com.example.snsClone.dto.PostDetailDTO;
 import com.example.snsClone.dto.ResponseDTO;
+import com.example.snsClone.entity.CommentEntity;
 import com.example.snsClone.entity.PostEntity;
 import com.example.snsClone.entity.PostLikeEntity;
 import com.example.snsClone.entity.UserEntity;
 import com.example.snsClone.repository.*;
 import com.example.snsClone.security.jwt.JwtUtil;
+import jakarta.transaction.Transactional;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -104,6 +107,7 @@ public class PostService {
         return ResponseEntity.ok(new ResponseDTO(200, true, "게시글 상세 정보", postDetail));
     }
 
+
     public ResponseEntity<ResponseDTO> toggleLike(String authHeader, Long postId) {
         String token = authHeader.substring(7);
         String userEmail = jwtUtil.extractEmail(token);
@@ -155,6 +159,7 @@ public class PostService {
             // 로그인 유저가 이 사용자를 팔로우하고 있는지 여부
             boolean isFollow = followRepository.existsByFollowerAndFollowing(loginUser, likedUser);
 
+            // map에 담아 위에 저장한 list로 출려
             Map<String, Object> userMap = new HashMap<>();
             userMap.put("userID", likedUser.getNickName());
             userMap.put("isFollow", isFollow);
@@ -166,4 +171,52 @@ public class PostService {
         return new ResponseDTO(200, true, "좋아요 누른 유저 목록 조회 성공", responseData);
     }
 
+    public ResponseEntity<ResponseDTO> addComments(String authorizationHeader, Long postId, String commentText) {
+        // 1. 로그인한 사용자 정보 추출
+        String token = authorizationHeader.substring(7);
+        String userEmail = jwtUtil.extractEmail(token);
+
+        UserEntity loginUser = userRepository.findByEmail(userEmail)
+                .orElseThrow(() -> new RuntimeException("해당 아이디 사용자 없음"));
+
+        // 2. 게시글이 있는지
+        PostEntity post = postRepository.findById(postId)
+                .orElseThrow(() -> new RuntimeException("해당 게시글이 존재 x"));
+
+
+        // 3. 댓글 추가 로직
+        CommentEntity comment = new CommentEntity();
+        comment.setUser(loginUser);
+        comment.setPost(post);
+        comment.setContext(commentText);
+
+        commentRepository.save(comment);
+
+        return ResponseEntity.ok(new ResponseDTO(200, true, "댓글 작성 완료!"));
+    }
+
+    public ResponseEntity<ResponseDTO> deletePosts(Long postId, String authorizationHeader) {
+
+        // 1. 로그인한 사용자 정보 추출
+        String token = authorizationHeader.substring(7);
+        String userEmail = jwtUtil.extractEmail(token);
+
+        UserEntity loginUser = userRepository.findByEmail(userEmail)
+                .orElseThrow(() -> new RuntimeException("해당 아이디 사용자 없음"));
+
+        // 2. 게시글이 있는지
+        PostEntity post = postRepository.findById(postId)
+                .orElseThrow(() -> new RuntimeException("해당 게시글이 존재 x"));
+
+        // 삭제하려는 게시글의 작성자와 로그인 유저가 다르다면 삭제불가 (본인의 게시글만 삭제를 해야되기때문)
+        if (!post.getUser().getId().equals(loginUser.getId())) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN) // 403 에러를 의미 .ok(~)는 status(200).body(~)
+                    .body(new ResponseDTO(403, false, "본인의 게시글만 삭제할 수 있습니다."));
+        }
+
+        // 4. 삭제 기능
+        postRepository.delete(post);
+
+        return ResponseEntity.ok(new ResponseDTO(200, true, "게시글 삭제 완료!"));
+    }
 }

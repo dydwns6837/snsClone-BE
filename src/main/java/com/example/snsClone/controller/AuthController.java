@@ -21,14 +21,16 @@ public class AuthController {
 
     //회원가입
     @PostMapping("/signUp")
-    public ResponseEntity<ResponseDTO> registerUser(@RequestBody SignupRequestDTO request) {
+    public ResponseEntity<ResponseDTO> registerUser(
+            @RequestBody SignupRequestDTO request) {
         ResponseDTO response = authService.registerUser(request);
         return ResponseEntity.status(response.getStatus()).body(response);
     }
 
     // 로그인
     @PostMapping("/login")
-    public ResponseEntity<LoginResponseDTO> login(@RequestBody LoginRequestDTO request) {
+    public ResponseEntity<LoginResponseDTO> login(
+            @RequestBody LoginRequestDTO request) {
         LoginResponseDTO response = authService.login(request);
         return ResponseEntity.status(response.getStatus()).body(response);
     }
