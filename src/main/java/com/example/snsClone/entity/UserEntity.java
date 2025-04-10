@@ -33,4 +33,7 @@ public class UserEntity {
 
     @Column(nullable = false, unique = true)
     private String phoneNumber;
+
+    @Column(columnDefinition = "TEXT")
+    private String article;
 }

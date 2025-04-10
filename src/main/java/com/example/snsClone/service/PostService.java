@@ -195,6 +195,7 @@ public class PostService {
         return ResponseEntity.ok(new ResponseDTO(200, true, "댓글 작성 완료!"));
     }
 
+    @Transactional
     public ResponseEntity<ResponseDTO> deletePosts(Long postId, String authorizationHeader) {
 
         // 1. 로그인한 사용자 정보 추출
@@ -209,12 +210,15 @@ public class PostService {
                 .orElseThrow(() -> new RuntimeException("해당 게시글이 존재 x"));
 
         // 삭제하려는 게시글의 작성자와 로그인 유저가 다르다면 삭제불가 (본인의 게시글만 삭제를 해야되기때문)
-        if (!post.getUser().getId().equals(loginUser.getId())) {
+        /* if (!post.getUser().getId().equals(loginUser.getId())) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN) // 403 에러를 의미 .ok(~)는 status(200).body(~)
                     .body(new ResponseDTO(403, false, "본인의 게시글만 삭제할 수 있습니다."));
-        }
+        } */
 
         // 4. 삭제 기능
+        postLikeRepository.deleteAllByPost(post); // postLikeEntity에 manyToOne으로 postEntity에 외래키로 참조하고 있어서
+        //해당 게시글이 삭제되면 참조 무결성(FK)이 깨지기 때문에 DB가 삭제를 막음
+
         postRepository.delete(post);
 
         return ResponseEntity.ok(new ResponseDTO(200, true, "게시글 삭제 완료!"));

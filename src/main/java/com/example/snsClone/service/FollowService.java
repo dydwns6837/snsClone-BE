@@ -55,7 +55,7 @@ public class FollowService {
             // 6. 이미 팔로우했는지 체크
             boolean isAlreadyFollow = followRepository.existsByFollowerAndFollowing(loginUser, targetUser);
             if (isAlreadyFollow) {
-                return ResponseEntity.badRequest().body(new ResponseDTO(400, false, "이미 팔로우한 사용자입니다."));
+                return ResponseEntity   .badRequest().body(new ResponseDTO(400, false, "이미 팔로우한 사용자입니다."));
             }
 
             // 7. 팔로우 엔티티 생성 및 저장
