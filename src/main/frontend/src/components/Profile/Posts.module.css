@@ -8,18 +8,33 @@
 
   width: 150px;
   height: 150px;
-  /* background-color: #f4f4f4; */
-  background-image: url(../../../public/main_section_1_img2.jpg);
+  background-color: #f4f4f4;
+  /* background-image: url(../../../public/main_section_1_img2.jpg); */
   /* background-image: url("https://m.cattery.co.kr/_dj/img/main_section_1_img2.jpg"); */
-  background-size: 150px;
+  /* background-size: 150px;
   background-repeat: no-repeat;
   background-position-y: -6px;
-  background-position: center;
+  background-position: center; */
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 20px;
   border: 1px solid #ddd;
+  position: relative;
+}
+
+.item img {
+  position: absolute;
+  width: 100%;
+  /* width: 50%; */
+  height: 100%;
+  /* height: 50%; */
+  /* top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto; */
+  pointer-events: none;
 }
 
 .hover {
@@ -32,6 +47,8 @@
   gap: 10px;
   align-items: center;
   font-size: 12px;
+  z-index: 1;
+  /* pointer-events: none; */
 }
 .hover svg {
   vertical-align: middle;

@@ -6,4 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface CommentRepository extends JpaRepository<CommentEntity, Long> {
     int countByPost(PostEntity post); // 댓글 수 카운트
+
+    void deleteAllByPost(PostEntity post);
 }

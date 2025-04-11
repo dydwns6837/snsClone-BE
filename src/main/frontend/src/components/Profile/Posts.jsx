@@ -18,6 +18,7 @@ import Skeleton from "../Skeleton/Skeleton"
 import Input from "../Input/Input"
 import Button from "../Button/Button"
 import LikeButton from "../Button/LikeButton"
+import DropdownToggleButton from "./Dropdown"
 
 import { Link } from "react-router-dom"
 
@@ -28,17 +29,20 @@ const Article = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [info, setInfo] = useState({})
   const [comment, setComment] = useState("")
+  
 
   const {isOpen, modalHandler} = useContext(ModalContext)
   
-  const {userID} = useContext(UserContext)
+  const {userID, isYou} = useContext(UserContext) // 프로필의 userID
   const {postID} = useContext(PostModalContext)
   // console.log(postID, userID, 'contetext');
   // console.log(info);
 
+  console.log(userID, isYou);
+
   const [isSecondOpen, setIsSecondOpen] = useState(false)
 
-
+  console.log(info);
   const getInfos = async () => {
     setIsLoading(true)
     // const sleep = await new Promise((res, rej) => {
@@ -63,12 +67,17 @@ const Article = () => {
   }
 
   const submitHandler = async e => {
-    setComment("")
     e.preventDefault()
+    if(comment == "") {
+      console.log('댓글을 입력하세요');
+      return
+    }
+    console.log('여기 실행?');
+    setComment("")
     console.log('submit!');
     console.log(comment);
     try {
-      const response = await fetch(`http://localhost:8080/api/posts/${postID}/new-comments`, {
+      const response = await fetch(`http://localhost:8080/api/posts/${postID}/newComments`, {
         method : "POST",
         headers : {
           "Content-Type": "application/json",
@@ -97,7 +106,7 @@ const Article = () => {
       })
 
       if(!response.ok) return
-      const {data} = await response.json()
+      const { data } = await response.json()
       console.log(data);
 
     } catch(err) {
@@ -142,23 +151,27 @@ const Article = () => {
   return (
     <div className={modalStyle["modal-overlay"]}  onClick={e => {
       // console.log('클릭이 감지됌!!');
+      // console.log('article 모달 핸들러 트리거');
       if(e.target == e.currentTarget) 
         modalHandler()
     }}>
       <div className={modalStyle["post-modal"]}>
         {isLoading ? "로딩중" : 
         <>
-          <div className={modalStyle["post-image"]}>{info.imageURL}
-
+          <div className={modalStyle["post-image"]}>
+            <img src={`${info.imageURL}`} alt={`${info.imageURL}`}/>
           </div>
           <div className={modalStyle["post-content"]}>
             <div className={`${modalStyle["display-row-container"]} ${modalStyle["post-header"]}`}>
               {/* <div className="hey"> */}
                 <Skeleton type={"image"} width={"40px"} height={"40px"}/>
                 {/* <div className={modalStyle["profile-img"]}>프로필 사진</div> */}
-                <Link to = {`/${userID}`} className={modalStyle.name}>{userID}</Link>
+                {/* <div className={modalStyle["header-name"]}> */}
+                  <Link to = {`/${userID}`} className={modalStyle.name}>{userID}</Link>
+                {/* </div> */}
               {/* </div> */}
-              <div onClick={deletePost}>...</div>
+              {/* {isYou && <div onClick={deletePost}>...</div>} */}
+              {isYou && <DropdownToggleButton postID = {postID}/>}
             </div>
             <div className={modalStyle["scroll-view"]}>
               <div className={`${modalStyle["display-row-container"]} ${modalStyle["post-body"]}`}>
@@ -229,6 +242,7 @@ const Posts = ({ data }) => {
       <ModalContext.Provider value={{isOpen, modalHandler}}>
         {/* <div className={style.item} onClick={modalHandler} onMouseEnter={() => setIsHover(true)} onMouseLeave={() => setIsHover(false)}> */}
         <div className={style.item} onClick={modalHandler}>
+          <img src={`${data.imageURL}`} alt={`${data.imageURL}`}/>
           {/* {isHover && <div className={style.hover}>{`${likes} ${comments}`}</div>} */}
           <div className={style.hover}>
             <div>

@@ -217,6 +217,7 @@ public class PostService {
 
         // 4. 삭제 기능
         postLikeRepository.deleteAllByPost(post); // postLikeEntity에 manyToOne으로 postEntity에 외래키로 참조하고 있어서
+        commentRepository.deleteAllByPost(post);
         //해당 게시글이 삭제되면 참조 무결성(FK)이 깨지기 때문에 DB가 삭제를 막음
 
         postRepository.delete(post);

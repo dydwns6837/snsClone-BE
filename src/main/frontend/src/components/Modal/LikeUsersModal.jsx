@@ -4,10 +4,13 @@ import listStyle from "../List/ListItem.module.css"
 
 import Skeleton from "../Skeleton/Skeleton";
 import FollowListSkeleton from "../Skeleton/FollowListSkeleton";
+import Button from "../Button/Button";
+import FollowButton from "../Button/FollowButton";
 
 import { useContext, useEffect, useState } from "react";
 import { PostModalContext } from "../../context/PostModalContext";
 import { Link } from "react-router-dom";
+// import { Button } from "@mui/material";
 
 const LikeUsersModal = ({modalHandler}) => {
   const [isLoading, setIsLoading] = useState(false)
@@ -66,6 +69,9 @@ const LikeUsersModal = ({modalHandler}) => {
     }
   }, [])
 
+  // const 
+
+
   return (
       <div className={modalDefaultStyle["modal-overlay"]} onClick={e => {
         if(e.target == e.currentTarget) modalHandler(prev => !prev)        
@@ -95,6 +101,8 @@ const LikeUsersModal = ({modalHandler}) => {
                     <Skeleton type={"image"} width={"50px"} height={"50px"}/>
                     <Link to= {`/${el.userID}`}>{el.userID}</Link>
                   </div>
+                  {/* {el.isFollow ? <Button text = "팔로잉" handler = {null} /> : <Button text="팔로우" handler={null} style="blue"/>} */}
+                  <FollowButton isFollwee={el.isFollow} userID={el.userID}/>
                 </div>
               )
             })
