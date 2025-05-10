@@ -25,16 +25,18 @@ public class PostService {
     private final PostLikeRepository postLikeRepository;
     private final CommentRepository commentRepository;
     private final FollowRepository followRepository;
+    private final PostImageRepository postImageRepository;
     private final JwtUtil jwtUtil;
 
     public PostService(PostRepository postRepository, UserRepository userRepository,
                        PostLikeRepository postLikeRepository, CommentRepository commentRepository,
-                       FollowRepository followRepository, JwtUtil jwtUtil) {
+                       FollowRepository followRepository, PostImageRepository postImageRepository,JwtUtil jwtUtil) {
         this.postRepository = postRepository;
         this.userRepository = userRepository;
         this.postLikeRepository = postLikeRepository;
         this.commentRepository = commentRepository;
         this.followRepository = followRepository;
+        this.postImageRepository = postImageRepository;
         this.jwtUtil = jwtUtil;
     }
 
@@ -56,7 +58,9 @@ public class PostService {
                 .map(post -> {
                     Map<String, Object> map = new HashMap<>();
                     map.put("postID", String.valueOf(post.getId()));
-                    map.put("imageURL", post.getImage());
+                    //map.put("imageURL", post.getImage()); 기존에 사용하던 코드(post_image테이블 따로 만들었기 때문에 사용불가.)
+                    String imageUrl = postImageRepository.findByPost(post).get(0).getImageUrl();
+                    map.put("imageURL", imageUrl);
 
                     int likeCount = postLikeRepository.countByPost(post);
                     int commentCount = commentRepository.countByPost(post);
@@ -217,7 +221,7 @@ public class PostService {
 
         // 4. 삭제 기능
         postLikeRepository.deleteAllByPost(post); // postLikeEntity에 manyToOne으로 postEntity에 외래키로 참조하고 있어서
-        commentRepository.deleteAllByPost(post);
+        commentRepository.deleteAllByPost(post); // 좋아요와 댓글을 먼저 삭제해준 후 게시글을 삭제 해줘야됨.
         //해당 게시글이 삭제되면 참조 무결성(FK)이 깨지기 때문에 DB가 삭제를 막음
 
         postRepository.delete(post);
