@@ -30,6 +30,11 @@ public class PostEntity {
     @OneToMany(mappedBy = "post")
     private List<CommentEntity> comments = new ArrayList<>();
 
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    // cascade entity의 상태 변화를 전파 시키는 옵션
+    // orphanRemoval 연관 관계가 사라진, 고아가 된 entity를 삭제. (게시글을 삭제하면 이미지들도 같이 삭제되게끔.)
+    private List<PostImageEntity> images = new ArrayList<>();
+
     private LocalDateTime createdAt;
 }
 
