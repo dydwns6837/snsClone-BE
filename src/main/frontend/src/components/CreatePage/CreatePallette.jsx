@@ -1,7 +1,7 @@
 import { useState } from "react"
 import Button from "../Button/Button";
 import style from "./CreatePallette.module.css"
-const CreatePallette = ({ files, setFiles, setShowPal }) => {
+const CreatePallette = ({ files, setFiles, setShowPal, label }) => {
   console.log('받은 배열', files);
   const [idx, setIdx] = useState(0)
 
@@ -40,18 +40,18 @@ const CreatePallette = ({ files, setFiles, setShowPal }) => {
   }
 
   return (
-    <>
-      {/* <div className={style["pallette-img"]}></div> */}
-      {/* 맨 마지막 요소를 지우게 되면 ex 3장의 사진중 맨마지막 idx = 2 > 리랜더링 files[2] 는 존재하지않아서 오류 발생 */}
+    <div className={style["pallette-div"]}>
       <img src={URL.createObjectURL(files[idx])} alt="" className={style["pallette-img"]}/>
       <button className={`${style.btn} ${style.deleteBtn}`} onClick={deleteHandler}>X</button>
       <button onClick={prevHandler} className={`${style.btn} ${style.prevBtn}`} disabled = {idx == 0}>&lt;</button>
-      <div className={style.info}>
+      {/* <div className={style.info}>
         <div>{`총 사진 개수 ${files.length}`}</div>
         <div>{`현재 idx ${idx}`}</div>
-      </div>
+      </div> */}
+      {label}
       <button onClick={nextHandler} className={`${style.btn} ${style.nextBtn}`} disabled = {idx == files.length - 1}>&gt;</button>
-    </>
+      {/* {showPal && <label htmlFor="file-input" className={`${style.btn} ${style.smallBtn}`}>+</label>} */}
+    </div>
   )
 }
 

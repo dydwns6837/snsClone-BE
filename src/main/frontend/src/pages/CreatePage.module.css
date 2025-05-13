@@ -21,26 +21,28 @@
   border-radius: 30px;
   padding: 10px 15px;
   bottom: 30px;
-  right: 30px;
+  /* right: 30px; */
+  left: 30px;
 }
 
-.pallette {
+.create {
   position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
   border: 2px dashed rgb(184, 222, 251);
   border-radius: 5px;
-  width: 800px;
+  /* width: 800px; */
   margin: auto;
   height: 800px;
 }
 
-.pallette.active {
+.create.active {
   border: solid rgb(187, 187, 187);
+  align-items: stretch;
 }
 
-.pallette button {
+.create button {
   /* position: absolute;
   top: 0px;
   right: 0px; */
