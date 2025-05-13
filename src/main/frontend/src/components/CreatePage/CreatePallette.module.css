@@ -1,5 +1,14 @@
+.pallette-div {
+  /* width: 800px; */
+  height: 800px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  border-right: 1px solid rgb(213, 213, 213);
+}
 .pallette-img {
-  width: 100%;
+  /* width: 100%; */
+  width: 750px;
   height: 100%;
   /* height: 200px; */
   /* background-color: blue; */

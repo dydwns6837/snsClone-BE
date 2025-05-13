@@ -1,6 +1,7 @@
 import { useState } from "react";
 import style from "./CreatePage.module.css"
 import CreatePallette from "../components/CreatePage/CreatePallette";
+import CommentInput from "../components/CreatePage/CommentInput"
 
 function CreatePage() {
   // console.log('ㅗㅑ');
@@ -16,6 +17,7 @@ function CreatePage() {
   */
   const fileChangeHandler = e => {
     const files = e.target.files
+    console.log(files);
     if(files.length == 0) return
     setShowPal(true)
     // console.log(files);
@@ -40,29 +42,14 @@ function CreatePage() {
   }
 
   return(
-    <>
-      <div className={ showPal ? `${style.pallette} ${style.active}` : style.pallette}>
-        {/* <div> */}
-          <input type="file" accept="image/*" multiple id="file-input" onChange={fileChangeHandler}  className={style["input-file"]}/>
-          {!showPal && <label htmlFor="file-input" className={style.btn}>사진업로드</label>}
-          {/* 여기부터 */}
-          {/* {files.map((file, idx) => {
-            const previewURL = URL.createObjectURL(file)
-            return (
-              <div key={file.name}>
-                <img src={previewURL} alt="" style={{width : "200px", height : "200px", objectFit : "cover"}}/>
-                <button onClick={() => removeHandler(idx)}>삭제</button>
-              </div>
-            )
-          })} */}
-          {/* 여기까지 컴포넌트로 만들기*/}
-          {showPal && <label htmlFor="file-input" className={`${style.btn} ${style.smallBtn}`}>+</label>}
-        {/* </div> */}
-        {showPal && <CreatePallette files = {files} setFiles = {setFiles} setShowPal = {setShowPal}/>}
+      <div className={ showPal ? `${style.create} ${style.active}` : style.create}>
+        <input type="file" accept="image/*" multiple id="file-input" onChange={fileChangeHandler}  className={style["input-file"]}/>
+        {!showPal && <label htmlFor="file-input" className={style.btn}>사진업로드</label>}
+        {/* {showPal && <label htmlFor="file-input" className={`${style.btn} ${style.smallBtn}`}>+</label>} */}
+        {/* <button>안녕</button> */}
+        {showPal && <CreatePallette files = {files} setFiles = {setFiles} setShowPal = {setShowPal} label = {<label htmlFor="file-input" className={`${style.btn} ${style.smallBtn}`}>+</label>}/>}
+        {showPal && <CommentInput files = {files}/>}
       </div>
-
-      {/* {showPal && <CreatePallette/>} */}
-    </>
   )
 }
 
