@@ -4,7 +4,9 @@ import com.example.snsClone.dto.ResponseDTO;
 import com.example.snsClone.service.PostService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -70,5 +72,14 @@ public class PostController {
             @RequestHeader("Authorization") String authorizationHeader
     ) {
         return postService.deletePosts(postID, authorizationHeader);
+    }
+
+    @GetMapping("/post")
+    public ResponseEntity<ResponseDTO> createPost(
+            @RequestParam("context") String context,
+            @RequestParam("images") List<MultipartFile> images,
+            @RequestHeader("Authorization") String authHeader
+    ) {
+        return postService.createPost(authHeader, context, images);
     }
 }

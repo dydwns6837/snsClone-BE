@@ -3,17 +3,18 @@ package com.example.snsClone.service;
 import com.example.snsClone.dto.CommentDTO;
 import com.example.snsClone.dto.PostDetailDTO;
 import com.example.snsClone.dto.ResponseDTO;
-import com.example.snsClone.entity.CommentEntity;
-import com.example.snsClone.entity.PostEntity;
-import com.example.snsClone.entity.PostLikeEntity;
-import com.example.snsClone.entity.UserEntity;
+import com.example.snsClone.entity.*;
 import com.example.snsClone.repository.*;
 import com.example.snsClone.security.jwt.JwtUtil;
 import jakarta.transaction.Transactional;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -227,5 +228,46 @@ public class PostService {
         postRepository.delete(post);
 
         return ResponseEntity.ok(new ResponseDTO(200, true, "게시글 삭제 완료!"));
+    }
+
+    @Transactional
+    public ResponseEntity<ResponseDTO> createPost(String authHeader, String context, List<MultipartFile> images) {
+        String token = authHeader.substring(7);
+        String email = jwtUtil.extractEmail(token);
+
+        UserEntity user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("사용자 없음"));
+
+        // 1. 게시글 저장
+        PostEntity post = new PostEntity();
+        post.setUser(user);
+        post.setContext(context);
+        post.setCreatedAt(LocalDateTime.now());
+        postRepository.save(post);
+
+        // 2. 이미지 저장
+        for (MultipartFile file : images) {
+            try {
+                String fileName = UUID.randomUUID() + "_" + file.getOriginalFilename();
+                String uploadDir = "src/main/resources/static/images/";
+                String path = uploadDir + fileName;
+
+                // 폴더 없으면 생성
+                File dir = new File(uploadDir);
+                if (!dir.exists()) dir.mkdirs();
+
+                file.transferTo(new File(path));
+
+                PostImageEntity image = new PostImageEntity();
+                image.setPost(post);
+                image.setImageUrl("/images/" + fileName);
+                postImageRepository.save(image);
+            } catch (IOException | IllegalStateException e) {
+                e.printStackTrace();
+                throw new RuntimeException("이미지 업로드 실패");
+            }
+        }
+
+        return ResponseEntity.ok(new ResponseDTO(200, true, "게시글 등록 완료"));
     }
 }
