@@ -56,7 +56,10 @@ const CommentInput = ({ files }) => {
     try {
       const response = await fetch("http://localhost:8080/api/post", {
         method : "POST",
-        body : formData
+        headers : {
+          Authorization : `Bearer ${localStorage.getItem("access_token")}`
+        },
+        body : formData,
       })
       if(!response.ok) {
         const error = await response.json()
