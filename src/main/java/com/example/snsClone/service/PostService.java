@@ -7,7 +7,6 @@ import com.example.snsClone.entity.*;
 import com.example.snsClone.repository.*;
 import com.example.snsClone.security.jwt.JwtUtil;
 import jakarta.transaction.Transactional;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -59,9 +58,10 @@ public class PostService {
                 .map(post -> {
                     Map<String, Object> map = new HashMap<>();
                     map.put("postID", String.valueOf(post.getId()));
-                    //map.put("imageURL", post.getImage()); 기존에 사용하던 코드(post_image테이블 따로 만들었기 때문에 사용불가.)
-                    String imageUrl = postImageRepository.findByPost(post).get(0).getImageUrl();
-                    map.put("imageURL", imageUrl);
+
+                    List<PostImageEntity> images = postImageRepository.findByPost(post);
+                    String imageUrl = images.isEmpty() ? null : images.get(0).getImageUrl();
+                    map.put("imageURL", imageUrl); // 썸네일 용도로 첫 이미지 하나만 사용
 
                     int likeCount = postLikeRepository.countByPost(post);
                     int commentCount = commentRepository.countByPost(post);
@@ -99,9 +99,13 @@ public class PostService {
 
         int likeCount = postLikeRepository.countByPost(post);
 
+        List<String> imageUrls = postImageRepository.findByPost(post).stream()
+                .map(PostImageEntity::getImageUrl)
+                .collect(Collectors.toList());
+
         PostDetailDTO postDetail = new PostDetailDTO(
                 post.getId(),
-                post.getImage(),
+                imageUrls,
                 likeCount,
                 isLiked,
                 post.getCreatedAt(),
@@ -203,16 +207,16 @@ public class PostService {
     @Transactional
     public ResponseEntity<ResponseDTO> deletePosts(Long postId, String authorizationHeader) {
 
-        // 1. 로그인한 사용자 정보 추출
-        String token = authorizationHeader.substring(7);
-        String userEmail = jwtUtil.extractEmail(token);
+            // 1. 로그인한 사용자 정보 추출
+            String token = authorizationHeader.substring(7);
+            String userEmail = jwtUtil.extractEmail(token);
 
-        UserEntity loginUser = userRepository.findByEmail(userEmail)
-                .orElseThrow(() -> new RuntimeException("해당 아이디 사용자 없음"));
+            UserEntity loginUser = userRepository.findByEmail(userEmail)
+                    .orElseThrow(() -> new RuntimeException("해당 아이디 사용자 없음"));
 
-        // 2. 게시글이 있는지
-        PostEntity post = postRepository.findById(postId)
-                .orElseThrow(() -> new RuntimeException("해당 게시글이 존재 x"));
+            // 2. 게시글이 있는지
+            PostEntity post = postRepository.findById(postId)
+                    .orElseThrow(() -> new RuntimeException("해당 게시글이 존재 x"));
 
         // 삭제하려는 게시글의 작성자와 로그인 유저가 다르다면 삭제불가 (본인의 게시글만 삭제를 해야되기때문)
         /* if (!post.getUser().getId().equals(loginUser.getId())) {
@@ -231,8 +235,8 @@ public class PostService {
     }
 
     @Transactional
-    public ResponseEntity<ResponseDTO> createPost(String authHeader, String context, List<MultipartFile> images) {
-        String token = authHeader.substring(7);
+    public ResponseEntity<ResponseDTO> createPost(String authorizationHeader, String context, List<MultipartFile> images) {
+        String token = authorizationHeader.substring(7);
         String email = jwtUtil.extractEmail(token);
 
         UserEntity user = userRepository.findByEmail(email)
@@ -260,8 +264,9 @@ public class PostService {
 
                 PostImageEntity image = new PostImageEntity();
                 image.setPost(post);
-                image.setImageUrl("/images/" + fileName);
+                image.setImageUrl("http://localhost:8080/images/" + fileName);
                 postImageRepository.save(image);
+
             } catch (IOException | IllegalStateException e) {
                 e.printStackTrace();
                 throw new RuntimeException("이미지 업로드 실패");
@@ -270,4 +275,48 @@ public class PostService {
 
         return ResponseEntity.ok(new ResponseDTO(200, true, "게시글 등록 완료"));
     }
+
+    public ResponseEntity<ResponseDTO> updatePost(Long postId, String authorizationHeader, String context, List<String> imageUrls) {
+        // 1. 로그인한 사용자 정보 추출
+        String token = authorizationHeader.substring(7);
+        String userEmail = jwtUtil.extractEmail(token);
+
+        UserEntity loginUser = userRepository.findByEmail(userEmail)
+                .orElseThrow(() -> new RuntimeException("사용자 없음"));
+
+        // 2. 게시글 조회
+        PostEntity post = postRepository.findById(postId)
+                .orElseThrow(() -> new RuntimeException("게시글 없음"));
+
+        // 3. 권한 확인
+        if (!post.getUser().getId().equals(loginUser.getId())) {
+            throw new RuntimeException("수정 권한 없음");
+        }
+
+        // 4. 게시글 내용 수정
+        post.setContext(context);
+
+        // 5. 기존 이미지 삭제 (imageUrls에 없는 것만 삭제)
+        List<PostImageEntity> existingImages = postImageRepository.findByPost(post);
+        Set<String> remaining = imageUrls != null ? new HashSet<>(imageUrls) : new HashSet<>();
+
+        for (PostImageEntity image : existingImages) {
+            if (!remaining.contains(image.getImageUrl())) {
+                // 실제 파일 삭제
+                File file = new File("src/main/resources/static" + image.getImageUrl());
+                if (file.exists()) file.delete();
+
+                // DB에서 삭제
+                postImageRepository.delete(image);
+            }
+        }
+
+        // 6. 게시글 저장
+        postRepository.save(post);
+
+
+        return ResponseEntity.ok(new ResponseDTO(200, true, "게시글 수정 완료"));
+    }
+
+
 }

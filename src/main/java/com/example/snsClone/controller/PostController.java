@@ -78,8 +78,19 @@ public class PostController {
     public ResponseEntity<ResponseDTO> createPost(
             @RequestParam("context") String context,
             @RequestParam("images") List<MultipartFile> images,
+            @RequestHeader("Authorization") String authorizationHeader
+    ) {
+        return postService.createPost(authorizationHeader, context, images);
+    }
+
+    @PatchMapping("/post/{postId}")
+    public ResponseEntity<ResponseDTO> updatePost(
+            @PathVariable Long postId,
+            @RequestParam("text") String context,
+            @RequestParam(value = "imageUrls", required = false) List<String> imageUrls,
+            //수정하고 남길 이미지들의 목록.
             @RequestHeader("Authorization") String authHeader
     ) {
-        return postService.createPost(authHeader, context, images);
+        return postService.updatePost(postId, authHeader, context, imageUrls);
     }
 }
