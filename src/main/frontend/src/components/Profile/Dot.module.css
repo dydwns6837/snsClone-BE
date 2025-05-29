@@ -1,0 +1,11 @@
+.dot {
+  width: 15px;
+  height: 15px;
+  border-radius: 20px;
+  background-color: rgb(179, 179, 179);
+  cursor: pointer;
+}
+
+.cur-dot {
+  background-color: black;
+}
