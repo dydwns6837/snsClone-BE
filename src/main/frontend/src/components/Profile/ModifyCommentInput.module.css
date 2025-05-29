@@ -1,0 +1,31 @@
+.info {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  border-bottom: 1px solid #f1f1f1;
+}
+
+.info .name {
+  padding: 20px 0px;
+  font-weight: bold;
+}
+
+.form {
+  position: relative;
+}
+
+.form button {
+  position: absolute;
+  right: 5px;
+  bottom: -15px;
+}
+
+.textarea {
+  resize: none;
+  width: 96%;
+  padding: 5px;
+  outline: none;
+  border: none;
+
+  font-size: 20px;
+}
