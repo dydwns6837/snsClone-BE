@@ -20,11 +20,12 @@ const ModifyCommentInput = ({curUserID, context, images}) => {
         method : "PATCH",
         headers : {
           'Authorization' : `Bearer ${localStorage.getItem("access_token")}`
+          ,'Content-Type' : 'application/json'
         },
-        body : {
-          deletedImageIds : images,
-          text : text
-        }
+        body : JSON.stringify({
+          imageUrls : images,
+          context : text
+        })
       })
     } catch(err) {
       console.error(err)
