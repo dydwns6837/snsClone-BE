@@ -253,8 +253,11 @@ public class PostService {
         for (MultipartFile file : images) {
             try {
                 String fileName = UUID.randomUUID() + "_" + file.getOriginalFilename();
-                String uploadDir = "src/main/resources/static/images/";
+                // 파일명 중복방지를 위한 랜덤UUID
+                String uploadDir = System.getProperty("user.dir") + "/images/";
+                // C:/snsClone/images/
                 String path = uploadDir + fileName;
+                // 최종경로
 
                 // 폴더 없으면 생성
                 File dir = new File(uploadDir);
