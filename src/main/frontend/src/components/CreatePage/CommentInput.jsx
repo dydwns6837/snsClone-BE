@@ -40,7 +40,7 @@ const CommentInput = ({ files }) => {
     files.forEach(file => {
       formData.append("images", file)
     })
-    formData.append("text", text)
+    formData.append("context", text)
     for (let pair of formData.entries()) {
       console.log(pair[0], pair[1]);
     }

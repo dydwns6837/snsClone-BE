@@ -11,7 +11,7 @@ import style from "./ModifyModal.module.css"
 import ModifyCommentInput from "./ModifyCommentInput.jsx"
 
 const ModifyModal = ({ setIsOpen }) => {
-  const {images, context} = useContext(ModifyContext)
+  const {imageUrls, context} = useContext(ModifyContext)
   const {curUserID} = useContext(UserContext)
   const [dupImages, setDupImages] = useState([...images])
   /*
