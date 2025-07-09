@@ -5,7 +5,7 @@ import { useContext } from "react"
 import { ModalContext } from "../../context/ModalContext"
 import { PostModalContext } from "../../context/PostModalContext"
 import { UserContext } from "../../context/UserContext"
-import { ModifyContext } from "../../context/ModifyContext.js"
+import { ModifyContext } from "../../context/ModifyContext"
 
 import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
 import ModeCommentOutlinedIcon from '@mui/icons-material/ModeCommentOutlined';

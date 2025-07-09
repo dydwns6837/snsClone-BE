@@ -1,0 +1,15 @@
+.searchDiv {
+  /* background-color: aqua; */
+  /* width: 600px; */
+}
+
+.searchBarDiv {
+  /* width: 400px; */
+}
+
+.list {
+  height: 100vh;
+  /* width: 100%; */
+  margin:10px 0px;
+  padding: 15px;
+}

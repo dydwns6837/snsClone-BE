@@ -16,7 +16,7 @@ import style from './ProfilePage.module.css'
 const ProfilePage = () => {
   // console.log('profilepage render');
   const {userID} = useParams() 
-  console.log(userID);
+  // console.log(userID);
   // console.log('profilePage params', userID);
   const [isLoading, setLoading] = useState(true)
   const [userData, setUserData] = useState(null)
@@ -26,7 +26,7 @@ const ProfilePage = () => {
   // console.log(userData);
   // console.log(userPosts);
   const getProfileInfos = async () => {
-    console.log('유저정보 및 게시글 들 불러오기!');
+    // console.log('유저정보 및 게시글 들 불러오기!');
     setLoading(true)
     setUserData(null)
     // console.log('데이터 패치!!!');

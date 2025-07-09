@@ -6,7 +6,7 @@ import './App.css'
 
 import Sidebar from './components/Sidebar/Sidebar'
 import HomePage from "./pages/HomePage";
-import SearchPage from './pages/SearchPage';
+import SearchPage from './pages/SearchPage/SearchPage';
 import CreatePage from './pages/CreatePage';
 import ProfilePage from './pages/ProfilePage/ProfilePage'
 

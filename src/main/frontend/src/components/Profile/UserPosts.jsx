@@ -2,7 +2,7 @@ import Posts from "./Posts";
 import style from "./UserPosts.module.css"
 function UserPosts( { datas } ) {
   // console.log('userpost render!');
-  console.log(datas);
+  // console.log(datas);
   // console.log(posts);
   return(
     <div className={style.grid} >
