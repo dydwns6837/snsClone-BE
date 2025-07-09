@@ -27,6 +27,7 @@ const CreatePallette = ({ files, setFiles, setShowPal, label }) => {
       return prev == 0 ? prev : prev - 1
     })
     // setIdx(idx - 1)
+    console.log('hello')
   }
 
   const nextHandler = () => {
